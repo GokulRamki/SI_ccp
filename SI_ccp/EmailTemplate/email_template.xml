@@ -1,0 +1,347 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Email>
+  <ReminderEmail_Subj>
+    Bmobile - Recharged your Mobile account
+  </ReminderEmail_Subj>
+  <ReminderEmail_Body>
+    <![CDATA[ 
+     Hi #StaffName#,    
+     <p>Your Mobile Account has been recharged for amount <b>SBD #TotalAmount# </b></p>     
+      <p>Your Mobile Number: #MSISDN# </p>   
+      <p>Topup Amount: SBD #TopupAmount# </p>  
+      <p>#Bundles# </p>
+      <p>Topup Date: #Date# </p> 
+    <br><br>
+    <p>Thanks, <br>#CompanyName#</p>
+    ]]>
+  </ReminderEmail_Body>
+  <ReminderEmail_BudleTbl_Head>
+    <![CDATA[ 
+    <table style="width:auto;" border="1" cellspacing="0" cellpadding="5"><tr><td colspan="2"><b>Bundle Details:</b></td></tr><tr><td style="font-weight:bold;">Bundle Name</td><td style="text-align:right; font-weight:bold;">Price(SBD)</td></tr>
+    ]]>
+  </ReminderEmail_BudleTbl_Head>
+  <ReminderEmail_BudleTbl_Row>
+    <![CDATA[ 
+    <tr><td>#BundleName#</td><td style="text-align:right;">#BundlePrice#</td></tr>
+    ]]>
+  </ReminderEmail_BudleTbl_Row>
+  <ReminderEmail_BudleTbl_Foot>
+    <![CDATA[ 
+    </table>
+    ]]>
+  </ReminderEmail_BudleTbl_Foot>
+  <SendCompanyEmail_Subj>
+    Bmobile - Company Login Details
+  </SendCompanyEmail_Subj>
+  <SendCompanyEmail_Body>
+    <![CDATA[ 
+     Hi #CompanyName#,       
+      <p>Your Username: #Email# </p>   
+      <p>Password: #Password# </p>  
+    <p>Please follow the URL to Login: <a href="#LoginURL#">#LoginURL#</a></p>
+    <br>
+    <br>
+    <p>Thanks, <br>Bmobile-Vodafone Customer Topup</p>
+    ]]>
+  </SendCompanyEmail_Body>
+
+  <SendUserEmail_Subj>
+    User Login Details
+  </SendUserEmail_Subj>
+
+  <SendUserEmail_Body>
+    <![CDATA[ 
+     Hi #UserName#,       
+      <p>Your Username: #Email# </p>   
+      <p>Password: #Password# </p>
+    <p>Please follow the URL to Login: <a href="#LoginURL#">#LoginURL#</a></p>
+    <br>
+    <br>
+    <p>Thanks, <br> Bmobile-Vodafone Customer Topup</p>
+    ]]>
+  </SendUserEmail_Body>
+
+
+  <SendImportTopupNotifyEmail_Subj>
+    Import Staff Topup Notification
+  </SendImportTopupNotifyEmail_Subj>
+
+  <SendUserImportTopupNotifyEmail_Body>
+    <![CDATA[ 
+     Hi #CompanyName#,
+     <p>Staff Topup file has been imported.  Please login to link below to process.</p>
+     <p>URL: <a href="#LoginURL#">#LoginURL#</a></p>
+    <br>
+     <br>
+    <p>Thanks, <br> Bmobile-Vodafone Customer Topup</p>
+    ]]>
+  </SendUserImportTopupNotifyEmail_Body>
+  
+  <SendAdminUserEmail_Subj>
+    Bmobile-Vodafone Customer Topup : Admin Login information
+  </SendAdminUserEmail_Subj>
+  <SendAdminUserEmail_Body>
+    <![CDATA[ 
+     Hi #Name#,    
+     <p> Please find the below details. </p>
+      <p>Your Email: #Email# </p>
+    <p>Your Password: #Password# </p>
+    <br> 
+    <p>Thanks, <br>Bmobile-Vodafone Customer Topup</p>
+    ]]>
+  </SendAdminUserEmail_Body>
+
+<!-- Send Failed Topup Bundle's Report Email Begin-->
+  <SendFailedTopupBundleEmail_Subj>
+    Bmobile-Vodafone Customer Topup Failed log for Bundle - #Date#
+  </SendFailedTopupBundleEmail_Subj>
+  <SendFailedTopupBundleEmail_Body>
+    <![CDATA[ 
+     Hi Admin,    
+     <p>Please refer below for the Failed topup Bundle Details</p>     
+      <br><br>
+      <table border="1" cellspacing="0" cellpadding="2">
+      <tr style="font-weight:bold; background-color:#ddd;">
+        <td>Msisdn Number</td> 
+        <td>Bundle Id</td>
+        <td>Bundle Name</td>       
+        <td>Bundle Amount</td>
+        <td>Result Code</td>
+        <td>Description</td>
+        <td>Transaction Date</td>
+      </td> 
+      #TableRow#
+      </table>
+    <br><br>
+    <p>Thanks, <br>Bmobile-Vodafone Customer Topup</p>
+    ]]>
+  </SendFailedTopupBundleEmail_Body>
+  <SendFailedTopupBundleEmail_Row>
+    <![CDATA[     
+      <tr>
+        <td>#msisdn#</td>
+        <td>#BundleId#</td>
+        <td>#BundleName#</td>   
+        <td>#amount#</td>
+        <td>#resultcode#</td>
+        <td>#Desc#</td>  
+        <td>#transDate#</td>
+      </td>      
+    ]]>
+  </SendFailedTopupBundleEmail_Row>
+  <!-- Send Failed Topup Bundle's Report Email End-->
+  
+ <!-- Send Failed Topup Report Email Begin-->
+  <SendFailedTopupEmail_Subj>
+    Bmobile-Vodafone Customer Topup Failed log for - #Date#
+  </SendFailedTopupEmail_Subj>
+  <SendFailedTopupEmail_Body>
+    <![CDATA[ 
+     Hi Admin,    
+     <p>Please refer below for the Failed topup Details</p>     
+      <br><br>
+      <table border="1" cellspacing="0" cellpadding="2">
+      <tr style="font-weight:bold; background-color:#ddd;">
+        <td>Msisdn Number</td>         
+        <td>Description</td>
+        <td>Transaction Date</td>
+      </td> 
+      #TableRow#
+      </table>
+    <br><br>
+    <p>Thanks, <br>Bmobile-Vodafone Customer Topup</p>
+    ]]>
+  </SendFailedTopupEmail_Body>
+  <SendFailedTopupEmail_Row>
+    <![CDATA[     
+      <tr>
+        <td>#msisdn#</td>
+        <td>#resultcode#</td>
+        <td>#transDate#</td>
+      </td>      
+    ]]>
+  </SendFailedTopupEmail_Row>
+  <!-- Send Failed Topup Report Email End-->
+  
+<Invoice_Subj>
+    DTU : Invoice Mail
+  </Invoice_Subj>
+  <Invoice_Body>
+    <![CDATA[ 
+<html>
+<body>
+<table width="100%" >
+    <tr>
+        <td width="640">
+              <p><img src="http://testbyp.bmobile.com.pg/images/bmobilelogo.png" width="200" height="100" /></p>
+         </td>
+        <td width="350">
+            <table>
+                <tr>
+                    <td style="text-align:right;">Invoice Date Time : </td>
+                    <td style="text-align:right;">&nbsp;#Date_time#</td>
+                </tr>
+                <tr>
+                     <td >Page : </td>
+                    <td>&nbsp;Page 1 of 1</td>
+                </tr>
+             </table>
+        </td>		 
+	 </tr>
+</table>
+
+<table width="100%" >
+        
+        <tr>
+             <td >bmobile Solomon Islands,</td>
+        </tr>
+        <tr>       
+              <td >P.O. Box 2134, </td>
+        </tr>
+        <tr>
+              <td >Honiara</td>
+        </tr>
+       
+        <tr>
+              <td >Email : support@bmobile.com.sb</td>
+        </tr>
+       
+</table>
+
+<br />
+<br />
+<br />
+<table width="100%">
+    <tr>
+	     <td style="text-align:center;font-weight:600;font-size:17px;" >
+	             INVOICE 
+	     </td>
+	 </tr>
+</table>
+<br />
+    <table width="100%" style="font-weight:bold;">
+        <tr >
+            <td style="width:200px;">INVOICE No :</td>
+            <td>#invoicetxt#</td>
+        </tr>
+        <tr >
+            <td style="width:200px;">Company Name :</td>
+            <td>#companyname#</td>
+        </tr>
+        <tr >
+            <td style="width:200px;">Mobile Number :</td>
+            <td>#master_no#</td>
+        </tr>
+        <tr>
+            <td style="width:200px;">Administrator Name :</td>
+            <td>#contact_name#</td>
+        </tr>
+        <tr>
+            <td style="width:200px;">Contact No :</td>
+            <td>#contactno#</td>
+        </tr>
+        <tr>
+            <td style="width:200px;">Email :</td>
+            <td> #mas_emailid#</td>
+        </tr>
+</table>
+<br />
+<table width="100%" >
+    <tr style="background-color:gray;">
+        <td style="black;text-align:center;" >Description</td>
+        <td style="text-align:center;">Quantity</td>
+        <td style="text-align:center;">Unit Price</td>
+        <td style="text-align:center;">Sales Tax 10%(+)</td>
+        <td style="text-align:center;">Total Payable(SBD)</td>
+    </tr>
+    <tr>
+        <td style="text-align:center">
+           Direct Topup
+        </td>
+        <td style="text-align:center">
+            #total_qnty#
+        </td>
+        <td style="text-align:center">
+            #plan_price#
+        </td>
+        <td style="text-align:center">
+            #gst_percentage#
+        </td>
+        <td style="text-align:right;border-bottom:1px solid black;">$ #tot_item_amt#
+        </td>
+    </tr>
+    <tr>
+         <td></td>	
+         <td></td>
+         <td></td>					   
+         <td style="text-align:right">Total</td>
+         <td style="text-align:right">$ #tot_item_amt# </td>
+    </tr>
+    <tr>
+         <td></td>	
+         <td></td>
+         <td></td>						   
+         <td style="text-align:right">Sales Tax</td>
+         <td style="text-align:right;border-bottom:1px solid black;">$ #gst_percentage# </td>
+    </tr>
+    <tr>
+        <td></td>	
+        <td></td>
+        <td></td>
+         <td style="text-align:right">Grand Total</td>
+         <td style="text-align:right;border-bottom:1px solid black;">$ #final_tot_amt# </td>
+    </tr>
+</table>
+<table width="100%">
+    <tr>
+         <td colspan="2" style="font-weight:bold;font-size:15px;">Payment Options:</td>
+      </tr>
+    <tr>
+         <td colspan="2">EFTPOS</td>        
+    </tr>
+    <tr>
+        <td colspan="2">Direct Deposit/Electronic Transfer:</td>        
+    </tr>
+    <tr>
+	  <td style="width: 130px;">
+         BANK
+	  </td>
+      <td>
+        Bank of South Pacific Limited
+      </td>
+	 </tr>
+    <tr>
+	 <td style="width: 130px;">
+        BANK NAME
+	 </td>
+     <td>
+       Bemobile (Solomon Islands) Limited
+     </td>
+	 </tr>
+    <tr>
+	 <td style="width: 130px;">
+         BANK ACCOUNT #
+	 </td>
+     <td>
+         4000173544
+     </td>
+	 </tr>
+    
+	 <td style="width: 130px;">
+         SWIFT CODE
+	 </td>
+     <td>
+       BOSP SBSB
+     </td>
+	 </tr>
+</table>
+    <br />
+   
+</body>
+</html>
+    ]]>
+  </Invoice_Body>
+  <User_AccLocked_Msg><![CDATA[ Your account has been locked. Please try after 24 Hrs]]></User_AccLocked_Msg>
+  <User_InvalidLogin_Msg><![CDATA[Invalid Username / Password]]></User_InvalidLogin_Msg>
+  <PwdExpied_Msg><![CDATA[Your password has expired. Please reset your password.]]></PwdExpied_Msg>
+</Email>

@@ -1,0 +1,214 @@
+﻿@using MvcPaging
+@model IPagedList<SI_ccp.Models.topup_report_model>
+
+@{
+    ViewBag.Title = "Topup Transactions";
+}
+
+
+<section id="widget-grid" style="margin: 0px auto;">
+    <!-- START ROW -->
+    <div class="row">
+        <!-- NEW COL START -->
+        <article class="col-sm-12 col-md-12 col-lg-6" style="float: none; margin: 5px auto; width: 100%;">
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget" id="wid-id-3" data-widget-editbutton="false" data-widget-custombutton="false">
+                <header>
+                    <span class="widget-icon"><i class="fa fa-edit"></i></span>
+                    <h2>Search</h2>
+                </header>
+                <!-- widget div-->
+                <div>
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
+                    </div>
+                    <!-- end widget edit box -->
+                    <!-- widget content -->
+                    <div class="widget-body no-padding">
+                        @using (Ajax.BeginForm("topup_transactions", "Admin",
+                            new AjaxOptions { UpdateTargetId = "grid-list", HttpMethod = "get", LoadingElementId = "loading", OnBegin = "beginPaging", OnSuccess = "successPaging", OnFailure = "failurePaging" },
+                            new { id = "from-company_transactions", @class = "smart-form" }))
+                        {
+                           
+                            <fieldset>
+                                <div class="row">
+                                    <section class="col col-3">
+                                        <b>Company name:</b>
+                                        <label class="input">
+                                            @Html.TextBox("sName")
+                                        </label>
+                                    </section>
+                                    <section class="col col-3">
+                                        <b>Mobile Number:</b>
+                                        <label class="input">
+                                            @Html.TextBox("sMsisdn")
+                                        </label>
+                                    </section>
+                                    <section class="col col-3">
+                                        <b>E-mail:</b>
+                                        <label class="input">
+                                            @Html.TextBox("sEmail")
+                                        </label>
+                                    </section>
+                                    <section class="col col-3">
+                                        <b>Invoice Number:</b>
+                                        <label class="input">
+                                            @Html.TextBox("sInvoice")
+                                        </label>
+                                    </section>
+
+                                </div>
+                                @{ string sdt = ViewData["sTransFrom"] != null ? ViewData["sTransFrom"].ToString() : string.Empty;
+                                    string edt = ViewData["sTransTo"] != null ? ViewData["sTransTo"].ToString() : string.Empty; }
+                                <div class="row">
+                                    <section class="col col-3">
+                                        <b>Payment Type:</b>
+                                        <label class="select">
+                                            @Html.DropDownList("ddlPayTypeId", new SelectList((List<SI_ccp.Models.tbl_payment_type>)ViewBag.PayTypeList, "Id", "payment_type"), "-- Select Payment Type --", new { })
+                                            <i></i>
+                                        </label>
+                                    </section>
+                                    <section class="col col-3">
+                                        <b>From Transactions:</b>
+                                        <label class="input">
+                                            @Html.TextBox("sTransFrom", "", new { Value = sdt, @readonly = "true" })
+                                        </label>
+                                    </section>
+                                    <section class="col col-3">
+                                        <b>Transactions To:</b>
+                                        <label class="input">
+                                            @Html.TextBox("sTransTo", "", new { Value = edt, @readonly = "true" })
+                                        </label>
+                                    </section>
+                                    <section class="col col-3">
+                                        <b>Sales Person:</b>
+                                        <label class="select">
+                                            <i class="icon-append fa fa-envelope-o"></i>
+                                            @Html.DropDownList("ddlSalesPerson", new SelectList(ViewBag.SalesPerson, "Id", "fullName"), "--Select Sales Person--")
+                                        </label>
+                                    </section>
+                                    <section class="col col-3">
+                                        <br />
+                                        <button type="submit" id="btnsubmit" class="btn btn-primary" style="padding: 5px;">
+                                            Search
+                                        </button>
+                                        &nbsp;&nbsp;
+                                        <button type="button" class="btn btn-primary" onclick="window.location = '/Admin/topup_transactions';" style="padding: 5px;">Reset</button>
+                                    </section>
+                                </div>
+
+                            </fieldset>
+                        }
+                    </div>
+                    <!-- end widget content -->
+                </div>
+                <!-- end widget div -->
+            </div>
+            <!-- end widget -->
+        </article>
+        <!-- END COL -->
+    </div>
+    <!-- END ROW -->
+</section>
+
+
+@if(Model.Count() > 0)
+{
+    <p style="text-align: right;">
+        <a href="@Url.Action("export_csv_companies", "Admin")">
+            <img src="~/img/grid/Csv-icon.png" alt="Export to csv" border="0" />
+        </a>
+    </p>
+}
+
+<div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-2" data-widget-editbutton="false">
+    <header>
+        <span class="widget-icon"><i class="fa fa-table"></i></span>
+        <h2 id="widget_title">Topup Transactions</h2>
+    </header>
+    <!-- widget div-->
+    <div>
+        <!-- widget edit box -->
+        <div class="jarviswidget-editbox">
+            <!-- This area used as dropdown edit box -->
+        </div>
+        <!-- end widget edit box -->
+
+        <div id="grid-list">
+            @if (Model != null && Model.Count > 0)
+            {
+                { Html.RenderPartial("_ajax_topup_transactions", Model); }
+            }
+            else
+            {
+                <div style="width: 100%; text-align: center; padding: 10px 0px 10px 0px;">Records Not found!</div>
+            }
+
+        </div>
+        <div id="progress_panel" class="widget-body" style="display: none; text-align: center;">
+            <img src="~/img/ajax-loader.gif" alt="Loading.." style="margin: 15px 0px 15px 0px;" />
+        </div>
+    </div>
+</div>
+<!-- end widget div -->
+@section Scripts {
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $("#sTransFrom").datepicker({
+                dateFormat: "dd/mm/yy",
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-104:+0",
+                beforeShow: function () {
+                    jQuery(this).datepicker('option', 'maxDate', jQuery('#sTransTo').val(), 'dd/mm/yy');
+                }
+            });
+
+            $("#sTransTo").datepicker({
+                dateFormat: "dd/mm/yy",
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-104:+0",
+                beforeShow: function () {
+                    jQuery(this).datepicker('option', 'minDate', jQuery('#sTransFrom').val());
+                }
+            });
+        });
+
+    </script>
+
+
+
+    <script type="text/javascript">
+
+        function beginPaging(args) {
+            // Animate
+            $('#grid-list').fadeOut('normal');
+            $('#progress_panel').show();
+        }
+
+        function successPaging() {
+            // Animate
+            $('#grid-list').fadeIn('normal');
+            $('a').tooltip();
+            $('#progress_panel').hide();
+        }
+
+        function failurePaging() {
+            alert("Could not retrieve list.");
+        }
+
+
+    </script>
+}
+
+
+
+
+
+

@@ -1,0 +1,207 @@
+﻿@using MvcPaging
+@model IPagedList<SI_ccp.Models.ccp_AuditModel>
+@{
+
+    var listItems = new List<SelectListItem>();
+    listItems.Add(new SelectListItem { Text = "Admin", Value = "Admin" });
+    listItems.Add(new SelectListItem { Text = "Company", Value = "Company" });
+    listItems.Add(new SelectListItem { Text = "User", Value = "User" });
+}
+
+<section id="widget-grid" style="margin: 0px auto;">
+    <!-- START ROW -->
+    <div class="row">
+        <!-- NEW COL START -->
+        <article class="col-sm-12 col-md-12 col-lg-6" style="float: none; margin: 5px auto; width: 100%;">
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget" id="wid-id-3" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+                <header>
+                    <span class="widget-icon"><i class="fa fa-edit"></i></span>
+                    <h2>Search</h2>
+                </header>
+                <!-- widget div-->
+                <div>
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
+                    </div>
+                    <!-- end widget edit box -->
+                    <!-- widget content -->
+                    <div class="widget-body no-padding">
+                        @using (Ajax.BeginForm("Audit_log", "admin",
+new AjaxOptions { UpdateTargetId = "grid-list", HttpMethod = "Post", LoadingElementId = "loading", OnBegin = "beginPaging", OnSuccess = "successPaging", OnFailure = "failurePaging" },
+new { id = "frmcugtrack", @class = "smart-form" }))
+                        {
+                            <fieldset>
+                                <div class="row">
+                                    <section class="col col-3">
+                                        <b>User Name:</b>
+                                        <label class="input">
+                                            @Html.TextBox("username", null, new { placeholder = "User Name" })
+                                        </label>
+                                    </section>
+                                    <section class="col col-3">
+                                        <b>Role:</b>
+                                        <label class="select">
+                                            @Html.DropDownList("roleid", new SelectList(ViewBag.rolelist, "id", "role_name"), "--- All ---")<i></i>
+                                        </label>
+                                    </section>
+                                    <section class="col col-3">
+                                        <b>Action:</b>
+                                        <label class="select">
+                                            @Html.DropDownList("act_id", new SelectList(ViewBag.actlist, "id", "action_name"), "--- All ---")<i></i>
+                                        </label>
+                                    </section>
+                                    <section class="col col-3">
+                                        <b>Category:</b>
+                                        <label class="select">
+                                            @Html.DropDownList("cat_id", new SelectList(ViewBag.catlist, "id", "report_cat_name"), "--- All ---")<i></i>
+                                        </label>
+                                    </section>
+                                </div>
+                                <div class="row">
+                                    <section class="col col-3">
+                                        <b>IP Address:</b>
+                                        <label class="input">
+                                            @Html.TextBox("ip_add", null, new { placeholder = "IP Address" })
+                                        </label>
+                                    </section>
+                                    <section class="col col-3">
+                                        <b>Start Date:</b>
+                                        <label class="input">
+                                            @Html.TextBox("sdate", null, new { placeholder = "DD/MM/YYYY", @readonly = "readonly" })
+                                        </label>
+                                    </section>
+                                    <section class="col col-3">
+                                        <b>End Date:</b>
+                                        <label class="input">
+                                            @Html.TextBox("edate", null, new { placeholder = "DD/MM/YYY", @readonly = "readonly" })
+                                        </label>
+                                    </section>
+                                    <section class="col col-3">
+                                        <b>Access From:</b>
+                                        <label class="select">
+                                            @Html.DropDownList("aces_from", new SelectList(listItems, "Value", "Text"))<i></i>
+                                        </label>
+                                    </section>
+                                </div>
+                                <div class="row">
+                                    <section class="col col-3">
+                                        <b>Msisdn</b>
+                                        <label class="input">
+                                            @Html.TextBox("msisdn", null, new { placeholder = "msisdn" })
+                                        </label>
+                                    </section>
+
+                                </div>
+                                <section class="col col-2 pull-right">
+                                    <br />
+                                    <input type="submit" id="btnsubmit" class="btn btn-primary" style="padding: 5px;" value="Search" />
+                                    &nbsp;&nbsp;
+                                    <input type="button" value="Reset" class="btn btn-primary" onclick="window.location='@Url.Action("Audit_log", "admin")'" style="padding: 5px;" />
+                                </section>
+
+                            </fieldset>
+                        }
+                    </div>
+                    <!-- end widget content -->
+                </div>
+                <!-- end widget div -->
+            </div>
+            <!-- end widget -->
+        </article>
+        <!-- END COL -->
+    </div>
+    <!-- END ROW -->
+</section>
+
+@if (TempData["successmsg"] != null)
+{
+    <div class="alert alert-success fade in">
+        <button class="close" data-dismiss="alert">
+            ×
+        </button>
+        <i class="fa-fw fa fa-check"></i>
+        <strong>Success</strong> @TempData["successmsg"]
+    </div>
+}
+<p style="text-align: right;">
+    <a class="btn btn-primary btn-xs" href="@Url.Action("AuditExcel", "admin")">Export to Excel</a>
+</p>
+<div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-2" data-widget-editbutton="false">
+    <header>
+        <span class="widget-icon"><i class="fa fa-table"></i></span>
+        <h2>Tracking Log</h2>
+    </header>
+    <!-- widget div-->
+    <div>
+        <!-- widget edit box -->
+        <div class="jarviswidget-editbox">
+            <!-- This area used as dropdown edit box -->
+        </div>
+        <!-- end widget edit box -->
+        <div id="grid-list">
+            @if (Model.Count > 0)
+            {
+                { Html.RenderPartial("_Ajax_Ccp_AuditLog", Model); }
+            }
+            else
+            {
+                <div style="width:100%; text-align:center; padding:10px 0px 10px 0px;">Records Not found!</div>
+            }
+
+        </div>
+
+    </div>
+</div>
+<!-- end widget div -->
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+
+            $("#sdate").datepicker({
+                dateFormat: "dd/mm/yy",
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-25:+0",
+                maxDate: 0
+                // beforeShow: function () {
+                //             jQuery(this).datepicker('option', 'minDate', jQuery('#edate').val(), 'dd/mm/yy');
+                // }
+            });
+
+            $("#edate").datepicker({
+                dateFormat: "dd/mm/yy",
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-25:+0",
+                maxDate: 0
+                // beforeShow: function () {
+                //        jQuery(this).datepicker('option', 'maxDate', jQuery('#sdate').val(), 'dd/mm/yy');
+                // }
+            });
+        });
+
+    </script>
+
+
+    <script type="text/javascript">
+        function beginPaging(args) {
+            // Animate
+            $('#grid-list').fadeOut('normal');
+            $("#LoadingDialog").show();
+        }
+
+        function successPaging() {
+            // Animate
+            $('#grid-list').fadeIn('normal');
+            $("#LoadingDialog").hide();
+        }
+
+        function failurePaging() {
+            alert("Could not retrieve list.");
+            $("#LoadingDialog").hide();
+        }
+    </script>
+}

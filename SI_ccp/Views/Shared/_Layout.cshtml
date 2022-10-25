@@ -1,0 +1,206 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title :: SI-CCP</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    @Scripts.Render("~/bundles/modernizr")
+    @Styles.Render("~/SmartAdmin/css")
+    <link href="@Url.Content("~/css/bootstrap.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/css/font-awesome.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/css/font-style.css")" rel="stylesheet" />
+    @{
+        
+
+        string conlr_name = ViewContext.Controller.ValueProvider.GetValue("controller").RawValue.ToString();
+    }
+</head>
+<body class="desktop-detected pace-done ">
+    <!-- HEADER -->
+    <header id="header" style="height:80px;">
+
+        <div id="logo-group">
+            <!-- PLACE YOUR LOGO HERE -->
+            <span id="logo">
+                <img src="@Url.Content("~/images/bmobilelogo.png")" style="width:145px;" alt="BmobileAdmin">
+            </span>
+            <!-- END LOGO PLACEHOLDER -->
+        </div>
+
+
+        <!-- projects dropdown -->
+        <div id="project-context">
+        </div>
+        <!-- end projects dropdown -->
+        <!-- pulled right: nav area -->
+        <div class="pull-right">
+
+            <!-- collapse menu button -->
+            <div id="hide-menu" class="btn-header pull-right">
+                <span><a href="javascript:void(0);" title="Collapse Menu"><i class="fa fa-reorder"></i></a></span>
+            </div>
+            <!-- end collapse menu -->
+            <!-- logout button -->
+
+
+            <div id="logout" class="btn-header transparent pull-right">
+                <span><a href="@Url.Action("Logout")" title="Sign Out"><i class="fa fa-sign-out"></i></a> </span>
+            </div>
+
+            <!-- end logout button -->
+            <!-- search mobile button (this is hidden till mobile view port) -->
+            <div id="search-mobile" class="btn-header transparent pull-right">
+                <span><a href="javascript:void(0)" title="Search"><i class="fa fa-search"></i></a></span>
+            </div>
+            <!-- end search mobile button -->
+
+        </div>
+        <!-- end pulled right: nav area -->
+
+    </header>
+    <!-- END HEADER -->
+    <!-- Left panel : Navigation area -->
+    @Html.Partial("_LeftPanelPartial")
+    <!-- END NAVIGATION -->
+    <!-- MAIN PANEL -->
+    <div id="main" role="main">
+
+
+        <!-- RIBBON -->
+        <div id="ribbon">
+            <span class="ribbon-button-alignment"><span id="refresh" class="btn btn-ribbon" data-title="refresh" rel="tooltip" data-placement="bottom" data-original-title="<i class='text-warning fa fa-warning'></i> Warning! This will reset all your widget settings." data-html="true"><i class="fa fa-refresh"></i></span></span>
+
+            <!-- breadcrumb -->
+            <ol class="breadcrumb">
+                <li>
+                    <i class="fa-fw fa fa-home"></i>@conlr_name
+                </li>
+                <li>
+                    @ViewBag.Title
+                </li>
+            </ol>
+            <!-- end breadcrumb -->
+
+        </div>
+        <!-- END RIBBON -->
+        <!-- MAIN CONTENT -->
+        <div id="content">
+            <div class="row">
+                <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+                    <h1 class="page-title txt-color-blueDark"><i class="fa-fw fa fa-home"></i>@conlr_name <span style="font-size: 24px;">>@ViewBag.Title</span></h1>
+                </div>
+            </div>
+            <!-- MAIN CONTENT -->
+            @RenderBody()
+            <!-- END MAIN CONTENT -->
+        </div>
+        <!-- END MAIN CONTENT -->
+
+    </div>
+    <!-- END MAIN PANEL -->
+    <!-- SHORTCUT AREA -->
+    <div id="shortcut"></div>
+    <!-- END SHORTCUT AREA -->
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @RenderSection("scripts", required: false)
+    <!--================================================== -->
+    <!-- PACE LOADER - turn this on if you want ajax loading to show (caution: uses lots of memory on iDevices)-->
+    <script data-pace-options='{ "restartOnRequestAfter": true }' src="js/plugin/pace/pace.min.js"></script>
+
+    <!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
+    <script src="@Url.Content("~/js/libs/jquery-2.0.2.min.js")"></script>
+    <script src="@Url.Content("~/js/libs/jquery-ui-1.10.3.min.js")"></script>
+
+    <!-- BOOTSTRAP JS -->
+    <script src="@Url.Content("~/js/bootstrap/bootstrap.min.js")"></script>
+    <!-- CUSTOM NOTIFICATION -->
+    <script src="@Url.Content("~/js/notification/SmartNotification.min.js")"></script>
+    <!-- JARVIS WIDGETS -->
+    <script src="@Url.Content("~/js/smartwidgets/jarvis.widget.min.js")"></script>
+    <!-- JQUERY MASKED INPUT -->
+    <script src="@Url.Content("~/js/plugin/masked-input/jquery.maskedinput.min.js")"></script>
+    <!-- browser msie issue fix -->
+    <script src="@Url.Content("~/js/plugin/msie-fix/jquery.mb.browser.min.js")"></script>
+    <!--[if IE 7]>
+        <h1>Your browser is out of date, please update your browser by going to www.microsoft.com/download</h1>
+        <![endif]-->
+    <!-- Demo purpose only -->
+    <!-- MAIN APP JS FILE -->
+    <script src="@Url.Content("~/js/app.js")"></script>
+    <!-- PAGE RELATED PLUGIN(S) -->
+
+
+    <script>
+        //mouse right click prevent in browser
+      
+        var rightclick = @System.Configuration.ConfigurationManager.AppSettings["rightclick"];
+        if (rightclick) {
+            document.addEventListener('contextmenu', event => event.preventDefault());
+        }
+    </script>
+
+    <script type="text/javascript">
+        $(function () {
+            setTimeout(function () {
+                $(".alert-success").fadeOut(function (event) {
+                    $(".alert-success").remove();
+                });
+            }, 1500)
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+
+            // DO NOT REMOVE : GLOBAL FUNCTIONS!
+            pageSetUp();
+
+        });
+
+    </script>
+
+    <style>
+        /* styles for validation helpers */
+
+        .input-validation-error {
+            border: 1px solid #a90329 !important;
+            background-color: #fff0f0 !important;
+        }
+
+        .field-validation-error span {
+            color: #d56161;
+            font-size: 11px;
+            font-style: normal;
+        }
+
+        .field-validation-error {
+            color: #e80c4d;
+            font-weight: bold;
+        }
+
+        .field-validation-valid {
+            display: none;
+        }
+
+        input.input-validation-error {
+            border: 1px solid #e80c4d;
+        }
+
+        input[type="checkbox"].input-validation-error {
+            border: 0 none;
+        }
+
+        .validation-summary-errors {
+            color: #e80c4d;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .validation-summary-valid {
+            display: none;
+        }
+    </style>
+
+</body>
+</html>

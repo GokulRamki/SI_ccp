@@ -1,0 +1,269 @@
+﻿@model SI_ccp.Models.InvoiceModel
+
+@{
+    ViewBag.Title = "Generate Invoice";
+    var suppEmail = "support@bmobile.com.sb";
+}
+
+<section id="widget-grid" style="margin: 0px auto;">
+    <!-- START ROW -->
+    <div class="row">
+        <iframe id="ifrmPrint" src="" style="width:0;height:0;"></iframe>
+        <!-- NEW COL START -->
+        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget well jarviswidget-color-darken" id="wid-id-0" data-widget-sortable="false" data-widget-deletebutton="false" data-widget-editbutton="false" data-widget-colorbutton="false">
+                <header>
+                    <span class="jarviswidget-loader"><i class="fa fa-edit"></i></span>
+                    <h2>Search</h2>
+                </header>
+                <!-- widget div-->
+                <div>
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
+                    </div>
+                    <!-- end widget edit box -->
+                    <!-- widget content -->
+                    <div class="widget-body no-padding">
+                        <div class="widget-body-toolbar">
+                            <div class="row">
+                                <div class="col-sm-6" id="title_content">
+                                    @*@Model.master.cug_name Invoice Report*@
+
+                                    <br>
+                                </div>
+                                <div class="col-sm-6 text-align-right">
+                                    <a href="/Company/InvoiceInPdf" class="btn btn-success" target="_blank">Export as PDF</a>
+                                    <button id="btnPrint" class="btn btn-success"><i class="fa fa-print "></i>&nbsp;Print Invoice</button>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="padding-10" id="print_content">
+                            <br />
+                            <div class="pull-left">
+                                <img src="@Url.Content("~/Images/bmobilelogo.png")" />
+                                <address>
+                                    <br />
+                                   @*<strong>TIN : </strong>500007351<br />*@
+                                <strong>bmobile Solomon Islands</strong><br />
+                                <strong>P.O. Box 2134,</strong><br />
+                                <strong>Honiara</strong><br />
+                                @*<strong>National Capital District 131</strong><br />*@
+                                <strong>Email : </strong>@suppEmail<br />
+                                @*<strong>Phone : </strong>76003555*@
+                                </address>
+                            </div>
+                            <div class="pull-right">
+                                <strong>Date & Time :</strong>&nbsp;@Model.invoicedetail.created_on.ToShortDateString() @DateTime.Now.ToString("hh:mm tt")
+                                <br />
+                                <strong>Page &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</strong>&nbsp;Page 1 of 1
+                            </div>
+                            <div class="clearfix"></div>
+                            <br />
+                            <br />
+                            <div class="row">
+                                <div style="text-align: center;">
+                                    <h4> INVOICE </h4>
+                                </div>
+                            </div>
+                            <!-- Master Details  -->
+                            <table>
+                                <tr>
+                                    <td>
+                                        <strong>Invoice No.</strong>
+                                    </td>
+                                    <td>
+                                        @Model.invoicedetail.invoice_txt
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Company Name</strong>
+                                    </td>
+                                    <td>
+                                        @Model.company_name
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Mobile Number</strong>
+                                    </td>
+                                    <td>
+                                        @Model.mobile_number
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Administrator Name </strong> &nbsp;
+                                    </td>
+                                    <td>
+                                        @Model.contact_person_name
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Contact No</strong>
+                                    </td>
+                                    <td>
+                                        @Model.phone_number
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Email</strong>
+                                    </td>
+                                    <td>
+                                        @Model.email
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="clearfix"></div>
+                            <br />
+                            <br />
+                            <!-- Member Details -->
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: center">Description</th>
+                                        <th style="text-align: center">Quantity</th>
+                                        <th style="text-align: center">Unit Price</th>
+                                        <th style="text-align: center">Sales Tax 10%(+)</th>
+                                        <th style="text-align: right">Total Payable(SBD)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="text-align: center">
+                                            Direct Topup
+                                        </td>
+                                        <td style="text-align: center">
+                                            @Model.invoicedetail.total_quantity
+                                        </td>
+                                        <td style="text-align: center">
+                                            <b>$</b> @Model.invoicedetail.unit_price
+                                        </td>
+                                        <td style="text-align: center">
+                                            @*<b>$</b> @string.Format("#0.00",Model.invoicedetail.total_gst_val)*@
+                                            <b>$</b> @Model.invoicedetail.total_gst_val.Value.ToString("0.00")
+                                        </td>
+                                        <td style="text-align: right">
+                                            @*<b>$</b> @string.Format("#0.00",Model.invoicedetail.item_val)*@
+                                            <b>$</b> @Model.invoicedetail.item_val.Value.ToString("0.00")
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="pull-right">
+                                <div style="min-width: 200px; border-top: 1px solid black;">
+                                    <strong style="font-size: 17px;">Total</strong>
+                                    @*<div class="pull-right" style="padding-right: 8px;"><b>$</b> @string.Format("#0.00",Model.invoicedetail.item_val) </div>*@
+                                    <div class="pull-right" style="padding-right: 8px;"><b>$</b> @Model.invoicedetail.item_val.Value.ToString("0.00") </div>
+                                </div>
+                                <div style="min-width: 200px;">
+                                    <strong style="font-size: 17px;">Sales Tax</strong>
+                                    @*<div class="pull-right" style="padding-right: 8px;"><b>$</b> @string.Format("#0.00",Model.invoicedetail.total_gst_val) </div>*@
+                                    <div class="pull-right" style="padding-right: 8px;"><b>$</b> @Model.invoicedetail.total_gst_val.Value.ToString("0.00") </div>
+                                </div>
+                                <div style="min-width: 200px; border-top: 1px solid black;">
+                                    <strong style="font-size: 17px;">Grand Total </strong>
+                                    @*<div class="pull-right" style="padding-right: 8px;"><b>$</b> @string.Format("#0.00",Model.invoicedetail.total_amt) </div>*@
+                                    <div class="pull-right" style="padding-right: 8px;"><b>$</b> @Model.invoicedetail.total_amt.Value.ToString("0.00") </div>
+                                </div>
+                                <br />
+                                @*<div style="min-width: 200px; border-top: 2px solid black;">Payment Due: Before 1st of <span style="font-weight:bold;">@Model.invoice_date.AddMonths(1).Date.ToString("MMMM")</span></div>
+                                    <div style="min-width: 200px;"><a href="http://cug.bmobile.com.pg/Admin/Login">CUG Portal Login</a></div>*@
+                            </div>
+                            <div class="clearfix"></div>
+
+                            <!-- Invoice footer -->
+                            <div class="row">
+                                <div class="col-sm-7">
+                                    <div>
+                                        <p><strong>Payment Options:</strong></p>
+                                        @*<p>Online or Voucher Topup through the CUG Portal</p>
+                                            <p>Electronic Voucher Distribution (EVD)</p>*@
+                                        <p>EFTPOS</p>
+                                        @*<p>Cheque or </p>*@
+                                        <p>Direct Deposit/Electronic Transfer:</p>
+                                        <table style="width: 100%;">
+                                            <tr>
+                                                <td><strong>BANK</strong></td>
+                                                <td><strong>Bank of South Pacific Limited</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>BANK NAME</strong></td>
+                                                <td><strong>Bemobile (Solomon Islands) Limited</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>BANK ACCOUNT #</strong></td>
+                                                <td><strong>4000173544</strong></td>
+                                            </tr>
+                                            @*<tr>
+                                             <td><strong>BSP #</strong></td>
+                                             <td><strong>088951</strong></td>
+                                            </tr>*@
+                                            <tr>
+                                                <td><strong>SWIFT CODE</strong></td>
+                                                <td><strong>BOSP SBSB</strong></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <br />
+                                    @*<div>
+                                            <strong>TERMS AND CONDITIONS</strong>
+                                            <div>
+                                                This is a prepaid product service, payment will need to be received by the 1st of each month
+                                                to ensure continuation of this service.
+                                            </div>
+                                        </div>*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end widget content -->
+                </div>
+                <!-- end widget div -->
+            </div>
+            <!-- end widget -->
+        </article>
+        <!-- END COL -->
+    </div>
+
+    <!-- END ROW -->
+
+</section>
+
+
+@section Scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#btnPrint').click(function () {
+                try {
+                    debugger;
+                    var oIframe = $("#ifrmPrint")[0];
+                    var oContent = $('#print_content').html();
+                    var oDoc = (oIframe.contentWindow || oIframe.contentDocument);
+                    if (oDoc.document) oDoc = oDoc.document;
+                    oDoc.write("<html><head>");
+                    oDoc.write("<link href='../css/bootstrap.min.css' rel='stylesheet' />");
+                    oDoc.write("</head><body onload='this.focus(); this.print();'>");
+                    oDoc.write(oContent + "</body></html>");
+                    oDoc.close();
+                    var ua = $.browser;
+                    if (ua.mozilla) {
+                        alert('Printing in progress..');
+                    }
+                }
+                catch (e) {
+                    //self.print();
+                }
+            });
+        });
+    </script>
+
+
+}

@@ -1,0 +1,116 @@
+﻿@model SI_ccp.Models.staff_process_model
+@{
+    ViewBag.Title = "Dashboard";
+}
+
+
+<section id="widget-grid" style="margin: 0px auto;">
+    <!-- START ROW -->
+    <div class="row">
+        <!-- NEW COL START -->
+        <article class="col-sm-12 col-md-12 col-lg-6" style="float: none; margin: 5px auto; width: 100%;">
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget" id="wid-id-4" data-widget-editbutton="false" data-widget-custombutton="false">
+                <header>
+                    <span class="widget-icon"><i class="fa fa-edit"></i></span>
+                    <h2>Company Dashboard</h2>
+                </header>
+                <!-- widget div-->
+                <div>
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
+                    </div>
+                    <!-- end widget edit box -->
+                    <!-- widget content -->
+                    <div class="widget-body no-padding">
+                        <div class="smart-form">
+                            <fieldset>
+
+                                @if (Model.company != null)
+                                {
+
+
+                                    <div class="row">
+                                        <section class="col col-6">
+                                            Company Name:
+                                            <b> @Model.company.company_name</b>
+                                        </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            Available Credit Amount:&nbsp;&nbsp;&nbsp;
+                                            <span class="@(Model.required_amt <= Model.company.credit_amount ? "badge bg-color-greenLight" : "badge bg-color-red")"> $&nbsp;@Model.company.credit_amount</span>
+                                        </section>
+                                        <section class="col col-4">
+                                            Required Amount:&nbsp;&nbsp;&nbsp;<span class="@(Model.required_amt <= Model.company.credit_amount ? "badge bg-color-greenLight" : "badge bg-color-red")"> $&nbsp;@Model.required_amt</span>
+                                        </section>
+
+                                        @{ decimal amt_owing = 0;
+
+                                         if (Model.required_amt > Model.company.credit_amount)
+                                         {
+                                             amt_owing = Model.required_amt - Model.company.credit_amount;
+                                         }
+                                        }
+
+                                        <section class="col col-4">
+                                            Amount Owing:&nbsp;&nbsp;&nbsp;<span class="@(amt_owing > 0 ? "badge bg-color-red" : "badge bg-color-greenLight")"> $&nbsp;@amt_owing</span>
+                                        </section>
+                                    </div>
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            Minimum Transaction Amount:&nbsp;&nbsp;&nbsp;<span class="badge bg-color-greenLight"> $&nbsp;@Model.company.min_trans_amount</span>
+                                        </section>
+                                        <section class="col col-4">
+                                            Maximum Transaction Amount:&nbsp;&nbsp;&nbsp;<span class="badge bg-color-greenLight"> $&nbsp;@Model.company.max_trans_amount</span>
+                                        </section>
+                                        <section class="col col-4">
+                                            &nbsp;
+                                        </section>
+                                    </div>
+                                    <div class="row">
+                                        <section class="col col-2">
+                                            <label class="label">Contact Name: </label>
+                                        </section>
+                                        <section class="col col-4">
+                                            <b>@Model.company.contact_person_name</b>
+                                        </section>
+                                        <section class="col col-2">
+                                            <label class="label">Email: </label>
+                                        </section>
+                                        <section class="col col-4">
+                                            <b>@Model.company.email</b>
+                                        </section>
+                                    </div>
+                                    <div class="row">
+
+                                        <section class="col col-2">
+                                            <label class="label">Mobile Number: </label>
+                                        </section>
+                                        <section class="col col-4">
+                                            <b>@Model.company.mobile_number</b>
+                                        </section>
+                                        <section class="col col-2">
+                                            <label class="label">Phone Number: </label>
+                                        </section>
+                                        <section class="col col-4">
+                                            <b>@Model.company.phone_number</b>
+                                        </section>
+                                    </div>
+                                }
+
+                            </fieldset>
+                        </div>
+                    </div>
+                    <!-- end widget content -->
+                </div>
+                <!-- end widget div -->
+            </div>
+            <!-- end widget -->
+        </article>
+        <!-- END COL -->
+    </div>
+    <!-- END ROW -->
+</section>

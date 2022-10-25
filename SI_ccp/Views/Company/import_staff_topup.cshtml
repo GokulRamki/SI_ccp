@@ -1,0 +1,547 @@
+﻿@model SI_ccp.Models.import_staff_model
+
+@{
+    ViewBag.Title = "Import Staffs Topup";
+}
+
+<style>
+    .isuccess {
+        color: green;
+    }
+
+    .ifail {
+        width: 100%;
+        color: red;
+        padding-bottom: 2px;
+    }
+</style>
+
+
+<section id="widget-grid" style="margin: 0px auto;">
+    <!-- START ROW -->
+    <div class="row">
+        <!-- NEW COL START -->
+        <article class="col-sm-12 col-md-12 col-lg-6" style="float: none; margin: 5px auto; width: 100%;">
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget" id="wid-id-4" data-widget-editbutton="false" data-widget-custombutton="false">
+                <header>
+                    <span class="widget-icon"><i class="fa fa-edit"></i></span>
+                    <h2>Company Details</h2>
+                </header>
+                <!-- widget div-->
+                <div>
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
+                    </div>
+                    <!-- end widget edit box -->
+                    <!-- widget content -->
+                    <div class="widget-body no-padding">
+                        <div class="smart-form">
+                            <fieldset>
+
+                                @if (Model.company_info != null)
+                                {
+
+                                    <div class="row">
+                                        <section class="col col-6">
+                                            Company Name:
+                                            <b> @Model.company_info.company_name</b>
+                                        </section>
+
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            Available Credtit Amount:&nbsp;&nbsp;&nbsp;
+                                            <span class="badge bg-color-greenLight"> $&nbsp;@Model.company_info.credit_amount</span>
+                                        </section>
+                                        <section class="col col-4">
+                                            Minimum Transaction Amount:&nbsp;&nbsp;&nbsp;<span class="badge bg-color-greenLight"> $&nbsp;@Model.company_info.min_trans_amount</span>
+                                        </section>
+                                        <section class="col col-4">
+                                            Maximum Transaction Amount:&nbsp;&nbsp;&nbsp;<span class="badge bg-color-greenLight"> $&nbsp;@Model.company_info.max_trans_amount</span>
+                                        </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-2">
+                                            <label class="label">Contact Name: </label>
+                                        </section>
+                                        <section class="col col-4">
+                                            <b>@Model.company_info.contact_person_name</b>
+                                        </section>
+                                        <section class="col col-2">
+                                            <label class="label">Email: </label>
+                                        </section>
+                                        <section class="col col-4">
+                                            <b>@Model.company_info.email</b>
+                                        </section>
+                                    </div>
+                                    <div class="row">
+
+                                        <section class="col col-2">
+                                            <label class="label">Mobile Number: </label>
+                                        </section>
+                                        <section class="col col-4">
+                                            <b>@Model.company_info.mobile_number</b>
+                                        </section>
+                                        <section class="col col-2">
+                                            <label class="label">Phone Number: </label>
+                                        </section>
+                                        <section class="col col-4">
+                                            <b>@Model.company_info.phone_number</b>
+                                        </section>
+                                    </div>
+
+
+                                }
+
+                            </fieldset>
+                        </div>
+                    </div>
+                    <!-- end widget content -->
+                </div>
+                <!-- end widget div -->
+            </div>
+            <!-- end widget -->
+        </article>
+        <!-- END COL -->
+    </div>
+    <!-- END ROW -->
+</section>
+
+
+@if (ViewBag.SuccessMessage != null)
+{
+    <div class="alert alert-success fade in">
+        <button class="close" data-dismiss="alert">
+            ×
+        </button>
+        <i class="fa-fw fa fa-check"></i>
+        <strong>Success</strong> @ViewBag.SuccessMessage
+    </div>
+}
+
+@if (ViewBag.Msg != null)
+{
+    <div class="alert alert-danger fade in">
+        <button class="close" data-dismiss="alert">
+            ×
+        </button>
+        <i class="fa-fw fa fa-check"></i>
+        <strong>Failed</strong> @ViewBag.Msg
+    </div>
+}
+
+@using (Html.BeginForm("import_staff_topup", "Company", FormMethod.Post, new { enctype = "multipart/form-data", id = "form-import_sim" }))
+{
+    <section id="widget-grid" style="margin: 0px auto;">
+        <!-- START ROW -->
+        <div class="row">
+
+            <!-- NEW COL START -->
+            <article class="col-sm-12 col-md-12 col-lg-6" style="float: none; margin: 5px auto;">
+
+                <!-- Widget ID (each widget will need unique ID)-->
+                <div class="jarviswidget" id="wid-id-2" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+
+                    <header>
+                        <span class="widget-icon"><i class="fa fa-edit"></i></span>
+                        <h2>Import Staff Topup</h2>
+
+                    </header>
+
+                    <!-- widget div-->
+                    <div>
+
+                        <!-- widget edit box -->
+                        <div class="jarviswidget-editbox">
+                            <!-- This area used as dropdown edit box -->
+
+                        </div>
+                        <!-- end widget edit box -->
+                        <!-- widget content -->
+                        <div class="widget-body no-padding">
+                            <div class="smart-form">
+                                @Html.ValidationSummary(true)
+                                <fieldset>
+                                    <section style="float: right;">
+                                        Download Template&nbsp;&nbsp;
+                                        <a class="pro-link" href="@Url.Action("download_stafftemplate", "User")">
+                                            <span class="lbtn btn-primary" style="padding: 8px 10px;">Download</span>
+                                        </a>
+                                    </section>
+                                    <br />
+                                    <br />
+                                    <section>
+                                        <b>CSV file:</b>
+                                        <div class="input input-file">
+                                            <span class="button">
+                                                @Html.TextBoxFor(m => m.staff_csv, new { @type = "file", @name = "file", @onchange = "this.parentNode.nextSibling.value = this.value" })Browse
+                                            </span><input type="text" placeholder="Upload a csv file" readonly="">
+                                        </div>
+                                        <label>@Html.ValidationMessageFor(model => model.staff_csv)</label>
+
+                                    </section>
+
+                                </fieldset>
+                                <footer>
+                                    <button type="submit" id="btnsubmit" name="cmd" value="Export" class="btn btn-primary">
+                                        Export
+                                    </button>
+                                </footer>
+                            </div>
+                        </div>
+                        <!-- end widget content -->
+
+                    </div>
+                    <!-- end widget div -->
+
+                </div>
+                <!-- end widget -->
+            </article>
+            <!-- END COL -->
+        </div>
+
+        <!-- END ROW -->
+    </section>
+
+    if (Model.staff_topup_list.Count > 0)
+    {
+        <section>
+
+            <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-2" data-widget-editbutton="false">
+                <header>
+                    <span class="widget-icon"><i class="fa fa-table"></i></span>
+                    <h2 id="widget_title">Staff Topup Details</h2>
+                </header>
+                <!-- widget div-->
+                <div>
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
+                    </div>
+                    <!-- end widget edit box -->
+
+
+                    <div id="grid-list">
+                        <div style="overflow-x:auto">
+                            <table class="table table-bordered table-hover" id="resulttab">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            MSISDN No
+                                        </th>
+                                        <th>
+                                            First Name
+                                        </th>
+                                        <th>
+                                            Last Name
+                                        </th>
+                                        <th>
+                                            Amount
+                                        </th>
+                                        <th>
+                                            Invoice
+                                        </th>
+                                        <th>
+                                            E-mail
+                                        </th>
+                                        <th>
+                                            Bundle1 Price
+                                        </th>
+                                        <th>
+                                            Bundle2 price
+                                        </th>
+                                        <th>
+                                            Bundle3 price
+                                        </th>
+                                        <th>
+                                            Description
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @for (int i = 0; i < Model.staff_topup_list.Count(); i++)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <input class="msisdn" type="hidden" value="@Model.staff_topup_list[i].msisdn_number" />
+                                                <span>@Model.staff_topup_list[i].msisdn_number</span>
+                                                @Html.HiddenFor(t => t.staff_topup_list[i].msisdn_number)
+                                            </td>
+                                            @if (Model.staff_topup_list[i].is_valid == false)
+                                            {
+                                                <td>
+                                                    @*@item.first_name&nbsp;@item.last_name*@
+                                                    @*<input type="text" id="s_name_@item.msisdn_number" placeholder="Staff Name" style="width:100%; border:none;"/>*@
+                                                    @Html.TextBoxFor(t => t.staff_topup_list[i].first_name, new { @class = "fname", @placeholder = "Firstname" })
+                                                </td>
+                                                <td>
+                                                    @Html.TextBoxFor(t => t.staff_topup_list[i].last_name, new { @class = "lname", @placeholder = "Lastname" })
+
+                                                </td>
+                                                <td>
+                                                    @*@item.amount*@
+                                                    @*<input type="text" id="amt_@item.msisdn_number" placeholder="Amount" style="width:100%; border:none;" />*@
+                                                    @Html.TextBoxFor(t => t.staff_topup_list[i].amount, new { @class = "amt", @placeholder = "0.00" })
+
+                                                </td>
+                                                <td>
+                                                    @*@item.invoice*@
+                                                    @*<input type="text" id="inv_@item.msisdn_number" placeholder="Invoice" style="width:100%; border:none;" />*@
+                                                    @Html.TextBoxFor(t => t.staff_topup_list[i].invoice, new { @class = "inv", @placeholder = "Invoice" })
+
+                                                </td>
+                                                <td>
+                                                    @*@item.email*@
+                                                    @*<input type="text" id="mail_@item.msisdn_number" placeholder="Email" style="width:100%; border:none;" />*@
+                                                    @Html.TextBoxFor(t => t.staff_topup_list[i].email, new { @class = "mail", @placeholder = "E-Mail" })
+                                                    @Html.ValidationMessageFor(t => t.staff_topup_list[i].email)
+                                                </td>
+                                                <td style="text-align:center;">
+                                                    @*@(item.bundle1_amt != null ? "$ " + item.bType + string.Format("{0:0.##}", item.bundle1_amt) : "")*@
+                                                    <label class="select">
+                                                        @Html.DropDownListFor(t => t.staff_topup_list[i].bType, new SelectList(ViewBag.BundleList, "id", "bundle_name"), "-- Select --", new { @class = "b1p" })<i></i>
+                                                    </label>
+                                                </td>
+                                                <td style="text-align:center;">
+                                                    @*@(item.bundle2_amt != null ? "$ " + item.bType2 + string.Format("{0:0.##}", item.bundle2_amt) : "")*@
+                                                    <label class="select">
+                                                        @Html.DropDownListFor(t => t.staff_topup_list[i].bType2, new SelectList(ViewBag.BundleList, "id", "bundle_name"), "-- Select --", new { @class = "b2p" })<i></i>
+                                                    </label>
+                                                </td>
+                                                <td style="text-align:center;">
+                                                    @*@(item.bundle3_amt != null ? "$ " + item.bType3 + string.Format("{0:0.##}", item.bundle3_amt) : "")*@
+                                                    <label class="select">
+                                                        @Html.DropDownListFor(t => t.staff_topup_list[i].bType3, new SelectList(ViewBag.BundleList, "id", "bundle_name"), "-- Select --", new { @class = "b3p" })<i></i>
+                                                    </label>
+                                                </td>
+                                            }
+                                            <td>
+                                                @Html.Raw(Model.staff_topup_list[i].description)
+                                                @Html.HiddenFor(t => t.staff_topup_list[i].is_valid, new { @class = "valid" })
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="progress_panel" class="widget-body" style="display: none; text-align: center;">
+                        <img src="~/img/ajax-loader.gif" alt="Loading.." style="margin: 15px 0px 15px 0px;" />
+                    </div>
+                </div>
+
+                <div class="col-sm-offset-5 col-sm-1" style="border:none">
+                    <button type="submit" id="btnsubmit" name="cmd" value="Save" class="btn btn-primary pull-right" style="padding:5px 10px;">Submit</button>
+                </div>
+            </div>
+
+        </section>
+    }
+}
+
+@*<section id="widget-grid" style="margin: 0px auto;">
+    <!-- START ROW -->
+    <div class="row">
+
+        <!-- NEW COL START -->
+        <article class="col-sm-12 col-md-12 col-lg-6" style="float: none; margin: 5px auto;">
+
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget" id="wid-id-2" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+
+                <header>
+                    <span class="widget-icon"><i class="fa fa-edit"></i></span>
+                    <h2>Import Staff Topup</h2>
+
+                </header>
+
+                <!-- widget div-->
+                <div>
+
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
+
+                    </div>
+                    <!-- end widget edit box -->
+                    <!-- widget content -->
+                    <div class="widget-body no-padding">
+                        @using (Html.BeginForm("import_staff_topup", "Company", FormMethod.Post, new { enctype = "multipart/form-data", id = "form-import_sim", @class = "smart-form" }))
+                        {
+                        @Html.ValidationSummary(true)
+
+                        <fieldset>
+
+                            <section style="float: right;">
+                                Download Template&nbsp;&nbsp;
+                                <a class="pro-link" href="@Url.Action("download_stafftemplate", "Company")">
+                                    <span class="lbtn btn-primary" style="padding: 8px 10px;">Download</span>
+                                </a>
+                            </section>
+                            <br />
+                            <br />
+
+                            <section>
+                                <b>CSV file:</b>
+                                <div class="input input-file">
+                                    <span class="button">
+                                        @Html.TextBoxFor(m => m.staff_csv, new { @type = "file", @name = "file", @onchange = "this.parentNode.nextSibling.value = this.value" })Browse
+                                    </span><input type="text" placeholder="Upload a csv file" readonly="">
+                                </div>
+                                <label>@Html.ValidationMessageFor(model => model.staff_csv)</label>
+
+                            </section>
+                        </fieldset>
+
+                        <footer>
+                            <button type="submit" class="btn btn-primary" id="btnSubmit">
+                                Save
+                            </button>
+                        </footer>
+                        }
+                    </div>
+                    <!-- end widget content -->
+
+                </div>
+                <!-- end widget div -->
+
+            </div>
+            <!-- end widget -->
+        </article>
+        <!-- END COL -->
+    </div>
+
+    <!-- END ROW -->
+</section>
+
+@if (ViewBag.SuccessMessage != null)
+{
+    <div class="alert alert-success fade in">
+        <button class="close" data-dismiss="alert">
+            ×
+        </button>
+        <i class="fa-fw fa fa-check"></i>
+        <strong>Success</strong> @ViewBag.SuccessMessage.
+    </div>
+}
+
+@if (ViewBag.Msg != null)
+{
+    <div class="alert alert-danger fade in">
+        <button class="close" data-dismiss="alert">
+            ×
+        </button>
+        <i class="fa-fw fa fa-check"></i>
+        <strong>Failed</strong> @ViewBag.Msg.
+    </div>
+}
+
+
+
+@if (Model.staff_topup_list.Count > 0)
+{
+    <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-2" data-widget-editbutton="false">
+        <header>
+            <span class="widget-icon"><i class="fa fa-table"></i></span>
+            <h2 id="widget_title">Staff Topup Details</h2>
+        </header>
+        <!-- widget div-->
+        <div>
+            <!-- widget edit box -->
+            <div class="jarviswidget-editbox">
+                <!-- This area used as dropdown edit box -->
+            </div>
+            <!-- end widget edit box -->
+
+
+            <div id="grid-list">
+
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+
+                            <th>
+                                Staff Name
+                            </th>
+                            <th>
+                                MSISDN Number
+                            </th>
+                            <th>
+                                Amount
+                            </th>
+                            <th>
+                                Invoice
+                            </th>
+                            <th>
+                                E-mail
+                            </th>
+                            <th>
+                                Bundle1 Price
+                            </th>
+                            <th>
+                                Bundle2 price
+                            </th>
+                            <th>
+                                Bundle3 price
+                            </th>
+                            <th>
+                                Description
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.staff_topup_list)
+                        {
+                            <tr>
+
+                                <td>
+                                    @item.first_name&nbsp;@item.last_name
+                                </td>
+                                <td>
+                                    @item.msisdn_number
+                                </td>
+
+                                <td>
+                                    @item.amount
+                                </td>
+                                <td>
+                                    @item.invoice
+                                </td>
+                                <td>
+                                    @item.email
+                                </td>
+                                <td style="text-align:center;">
+                                    @(item.bundle1_amt != null ? "K " + string.Format("{0:0.##}", item.bundle1_amt) : "")
+                                </td>
+                                <td style="text-align:center;">
+                                    @(item.bundle2_amt != null ? "K " + string.Format("{0:0.##}", item.bundle2_amt) : "")
+                                </td>
+                                <td style="text-align:center;">
+                                    @(item.bundle3_amt != null ? "K " + string.Format("{0:0.##}", item.bundle3_amt) : "")
+                                </td>
+                                <td>
+                                    @Html.Raw(item.description)
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+
+            </div>
+            <div id="progress_panel" class="widget-body" style="display: none; text-align: center;">
+                <img src="~/img/ajax-loader.gif" alt="Loading.." style="margin: 15px 0px 15px 0px;" />
+            </div>
+        </div>
+    </div>
+}*@
+
+
+
+

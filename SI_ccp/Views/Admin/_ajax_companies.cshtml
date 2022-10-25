@@ -1,0 +1,181 @@
+﻿@using MvcPaging
+@model IPagedList<SI_ccp.Models.CompanyModel>
+
+@if (Model.Count > 0)
+{
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>
+                    Company Name
+                </th>
+                <th>
+                    Contact Name
+                </th>
+                <th>
+                    Credit Amount
+                </th>
+                <th>
+                    E-mail
+                </th>
+                <th>
+                    Mobile Number
+                </th>
+                <th>
+                    City
+                </th>
+                <th>
+                    Created on
+                </th>
+                <th>
+                    Status
+                </th>
+                @if (Session["role_id"] != null && Session["role_id"].ToString() != "3")
+                {
+                    <td>Topup</td>
+                }
+                <th>
+                    Sales Person
+                </th>
+                @if (Session["role_id"] != null && Session["role_id"].ToString() == "1")
+                {
+                    <th>View Invoice</th>
+                }
+                <th>
+                    Edit
+                </th>
+                <th>
+                    Delete
+                </th>
+                <th>
+                    Contract Expiry Date
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+                {
+                <tr>
+                    <td>
+                        @item.company.company_name
+                    </td>
+                    <td>
+                        @item.company.contact_person_name
+                    </td>
+                    <td>
+                        $&nbsp; @item.company.credit_amount
+                    </td>
+                    <td>
+                        @item.company.email
+                    </td>
+                    <td>
+                        @item.company.mobile_number
+                    </td>
+
+                    <td>
+                        @item.company.city
+                    </td>
+                    <td>
+                        @item.company.created_on.ToString("d")
+                    </td>
+
+                    @if (item.company.isactive)
+                    {
+                        <td>
+                            Active
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            InActive
+                        </td>
+                    }
+                    
+                    @if (Session["role_id"] != null && Session["role_id"].ToString() != "3")
+                    {
+                        if (item.company.isactive)
+                        {
+                            <td>
+                                <a href="@Url.Action("topup", "Admin", new { id = item.company.id })"><img s><img src="~/img/grid/detail-icon.png" border="0" alt="Topup" /></a>
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                &nbsp;
+                            </td>
+                        }
+                    }
+                    <td>
+                        @item.sales_person
+                    </td>
+                    @if (Session["role_id"] != null && Session["role_id"].ToString() == "1")
+                    {
+                        if (item.company.isactive)
+                        {
+                            <td>
+                                <a class="invoice-link" href="@Url.Action("InvoiceReport", "Admin", new { id = item.company.id })">
+                                    <i class="fa fa-file-text-o"></i>
+                                </a>
+                            </td>
+
+                        }
+                        else
+                        {
+                            <td>
+                                &nbsp;
+                            </td>
+                        }
+                    }
+                    <td>
+                        <a href="@Url.Action("update_company", "Admin", new { id = item.company.id })"><img s><img src="~/img/grid/edit-icon.png" border="0" alt="Edit" /></a>
+                    </td>
+                    <td>
+                        <a class="delete-link" href="@Url.Action("delete_company", "Admin", new { id = item.company.id })">
+                            <img src="~/img/grid/delete-icon.png" border="0" alt="Delete" />
+                        </a>
+                    </td>
+                    <td>
+                        @string.Format("{0:dd/MM/yyyy}", item.company.contract_exp_date)
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+
+    <div class="page1">
+        @Html.Raw(Ajax.Pager(
+            new Options
+            {
+                PageSize = Model.PageSize,
+                TotalItemCount = Model.TotalItemCount,
+                CurrentPage = Model.PageNumber,
+                ItemTexts = new ItemTexts() { Next = "Next", Previous = "Previous", Page = "" },
+                ItemIcon = new ItemIcon() { First = "icon-backward", Previous = "icon-chevron-left", Next = "icon-chevron-right", Last = "icon-forward" },
+                TooltipTitles = new TooltipTitles() { Next = "Next page", Previous = "Previous page", Page = "Page {0}." },
+                Size = Size.normal,
+                Alignment = Alignment.centered,
+                IsShowControls = true,
+                IsShowFirstLast = true,
+                CssClass = ""
+            },
+            new AjaxOptions
+            {
+                UpdateTargetId = "grid-list",
+                OnBegin = "beginPaging",
+                OnSuccess = "successPaging",
+                OnFailure = "failurePaging"
+            }, new { controller = "Admin", action = "companies", email = ViewData["email"], company_name = ViewData["company_name"], mobile_no = ViewData["mobile_no"], ddlstatus = ViewData["ddlstatus"] }))
+        <div class="well">
+            Showing <span class="badge bg-color-greenLight">@Model.ItemStart</span> to <span class="badge bg-color-redLight">@Model.ItemEnd</span>
+            of <span class="badge bg-color-blueLight">@Model.TotalItemCount</span> entries
+        </div>
+    </div>
+}
+else
+{
+    <div style="width:100%; text-align:center; padding:10px 0px 10px 0px;">Records Not found!</div>
+}

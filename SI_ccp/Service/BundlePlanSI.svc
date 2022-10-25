@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="SI_ccp.Service.BundlePlanSI" CodeBehind="BundlePlanSI.svc.cs" %>

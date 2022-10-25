@@ -1,0 +1,215 @@
+﻿@model SI_ccp.Models.InvoiceModel
+@{
+    ViewBag.Title = "InvoiceInPdf";
+    Layout = null;
+    var suppEmail = "support@bmobile.com.sb";
+}
+<itext creationdate="@DateTime.Now.ToString()" producer="RazorPDF">
+    <table width="100%" cellpadding="1.0" cellspacing="1.0">
+        <row>
+            <cell>
+                <image url="@Context.Server.MapPath("~/Images/bmobilelogo.png")" />
+                <newline />
+                @*<chunk style="font-weight:bold;font-size:9">TIN : 500007351</chunk><newline />*@
+                <chunk style="font-weight:bold;font-size:9">bmobile Solomon Islands</chunk><newline />
+                <chunk style="font-size:9">P.O. Box 2134,</chunk><newline />
+                @*<chunk style="font-size:9">Waigani</chunk><newline />*@
+                <chunk style="font-size:9">Honiara</chunk><newline />
+                <chunk style="font-size:9">Email : @suppEmail</chunk><newline />
+                @*<chunk style="font-size:9">Phone : 76003555</chunk>*@
+            </cell>
+            <cell>
+                <table width="200" widths="2;3">
+                    <row>
+                        <cell horizontalalign="right">Date Time : </cell>
+                        <cell>@Model.invoicedetail.created_on.ToShortDateString() @DateTime.Now.ToString("hh:mm tt")</cell>
+                    </row>
+                    <row>
+                        <cell horizontalalign="right">Page     : </cell>
+                        <cell>Page 1 of 1</cell>
+                    </row>
+                </table>
+            </cell>
+        </row>
+    </table>
+    <newline />
+    <newline />
+    <table width="100%">
+        <row>
+            <cell horizontalalign="center">
+                INVOICE
+            </cell>
+        </row>
+    </table>
+    <newline />
+    <table width="100%" widths="1;3.8;">
+        <row>
+            <cell><chunk style="font-size:8;font-weight:bold;">INVOICE No                         :</chunk></cell>
+            <cell><chunk style="font-size:8;font-weight:bold;">@Model.invoicedetail.invoice_txt</chunk></cell>
+        </row>
+        <row>
+            <cell><chunk style="font-size:8;font-weight:bold;">Company Name                   :</chunk></cell>
+            <cell><chunk style="font-size:8;font-weight:bold;">@Model.company_name</chunk></cell>
+        </row>
+        <row>
+            <cell><chunk style="font-size:8;font-weight:bold;">Mobile Number                    :</chunk></cell>
+            <cell><chunk style="font-size:8;font-weight:bold;">@Model.mobile_number</chunk></cell>
+        </row>
+        <row>
+            <cell><chunk style="font-size:8;font-weight:bold;">Administrator Name            :</chunk></cell>
+            <cell><chunk style="font-size:8;font-weight:bold;">@Model.contact_person_name </chunk></cell>
+        </row>
+        <row>
+            <cell><chunk style="font-size:8;font-weight:bold;">Contact No                           :</chunk></cell>
+            <cell><chunk style="font-size:8;font-weight:bold;">@Model.phone_number </chunk></cell>
+        </row>
+        <row>
+            <cell><chunk style="font-size:8;font-weight:bold;">Email                                    :</chunk></cell>
+            <cell><chunk style="font-size:8;font-weight:bold;">@Model.email</chunk></cell>
+        </row>
+    </table>
+    <paragraph>
+    </paragraph>
+    <table width="100%" cellpadding="1.0" cellspacing="1.0" widths="5;5;5;3">
+        <row>
+            <cell borderwidth="0.5" left="false" right="false" top="false" bottom="true" horizontalalign="center">Description</cell>
+            <cell borderwidth="0.5" left="false" right="false" top="false" bottom="true" horizontalalign="center">Quantity</cell>
+            <cell borderwidth="0.5" left="false" right="false" top="false" bottom="true" horizontalalign="center">Unit Price</cell>
+            <cell borderwidth="0.5" left="false" right="false" top="false" bottom="true" horizontalalign="center">Sales Tax 10%(+)</cell>
+            <cell borderwidth="0.5" left="false" right="false" top="false" bottom="true" horizontalalign="center">Total Payable(SBD)</cell>
+        </row>
+        <row>
+            <cell horizontalalign="center">
+                Direct Topup
+            </cell>
+            <cell horizontalalign="center">
+                @Model.invoicedetail.total_quantity
+            </cell>
+            <cell horizontalalign="center">
+                @Model.invoicedetail.unit_price
+            </cell>
+            <cell horizontalalign="center">
+                @*@string.Format("#0.00", Model.invoicedetail.total_gst_val)*@
+                @Model.invoicedetail.total_gst_val.Value.ToString("0.00")
+            </cell>
+            <cell horizontalalign="right" borderwidth="0.5" left="false" right="false" top="false" bottom="true">
+                @*$ @string.Format("#0.00", Model.invoicedetail.item_val)*@
+                $ @Model.invoicedetail.item_val.Value.ToString("0.00")
+            </cell>
+        </row>
+        <row>
+            <cell></cell>
+            <cell></cell>
+            <cell></cell>
+            <cell horizontalalign="right">Total</cell>
+            @*<cell horizontalalign="right">$ @string.Format("#0.00", Model.invoicedetail.item_val) </cell>*@
+            <cell horizontalalign="right">$ @Model.invoicedetail.item_val.Value.ToString("0.00") </cell>
+        </row>
+        <row>
+            <cell></cell>
+            <cell></cell>
+            <cell></cell>
+            <cell horizontalalign="right">Sales Tax</cell>
+            @*<cell horizontalalign="right" borderwidth="0.5" left="false" right="false" top="false" bottom="true">$ @string.Format("#0.00", Model.invoicedetail.total_gst_val) </cell>*@
+            <cell horizontalalign="right" borderwidth="0.5" left="false" right="false" top="false" bottom="true">$ @Model.invoicedetail.total_gst_val.Value.ToString("0.00") </cell>
+        </row>
+        <row>
+            <cell></cell>
+            <cell></cell>
+            <cell></cell>
+            <cell horizontalalign="right">Grand Total</cell>
+            @*<cell horizontalalign="right" borderwidth="1" left="false" right="false" top="false" bottom="true">$ @string.Format("#0.00",Model.invoicedetail.total_amt) </cell>*@
+            <cell horizontalalign="right" borderwidth="1" left="false" right="false" top="false" bottom="true">$ @Model.invoicedetail.total_amt.Value.ToString("0.00") </cell>
+        </row>
+    </table>
+    @*<table width="100%" cellpadding="1.0" cellspacing="1.0" widths="5;5">
+            <row>
+                <cell horizontalalign="right" colspan="2">Payment Due : </cell>
+                <cell horizontalalign="right">Before 1st of <span style="font-weight:bold;">@Model.invoice_date.AddMonths(1).Date.ToString("MMMM")</span></cell>
+            </row>
+            <row>
+                <cell horizontalalign="right" colspan="3">
+                    CUG Portal :<anchor fontstyle="normal, underline" red="0" green="0" blue="255" reference="http://cug.bmobile.com.pg/Admin/Login">http://cug.bmobile.com.pg</anchor>
+                </cell>
+            </row>
+        </table>*@
+    <newline />
+    <table width="100%" widths="1;4.5;">
+        <row>
+            <cell colspan="2"><chunk style="font-size:9;font-weight:bold;">Payment Options: </chunk></cell>
+        </row>
+        @*<row>
+                <cell colspan="2"><chunk style="font-size:8;">Online or Voucher Topup through the CUG Portal </chunk></cell>
+            </row>
+            <row>
+                <cell colspan="2"><chunk style="font-size:8;">Electronic Voucher Distribution (EVD)</chunk></cell>
+            </row>*@
+        <row>
+            <cell colspan="2"><chunk style="font-size:8;">EFTPOS</chunk></cell>
+        </row>
+        <row>
+            <cell colspan="2"><chunk style="font-size:8;">Direct Deposit/Electronic Transfer: </chunk></cell>
+        </row>
+        <row>
+            <cell>
+                <chunk style="font-size:8;">BANK</chunk>
+            </cell>
+            <cell>
+                <chunk style="font-size:8;">Bank of South Pacific Limited</chunk>
+            </cell>
+        </row>
+        <row>
+            <cell>
+                <chunk style="font-size:8;">BANK NAME</chunk>
+            </cell>
+            <cell>
+                <chunk style="font-size:8;">Bemobile (Solomon Islands) Limited</chunk>
+            </cell>
+        </row>
+        <row>
+            <cell>
+                <chunk style="font-size:8;">BANK ACCOUNT #</chunk>
+            </cell>
+            <cell>
+                <chunk style="font-size:8;">4000173544</chunk>
+            </cell>
+        </row>
+        @*<row>
+            <cell>
+                <chunk style="font-size:8;">BSP #</chunk>
+            </cell>
+            <cell>
+                <chunk style="font-size:8;">088951</chunk>
+            </cell>
+        </row>*@
+        <row>
+            <cell>
+                <chunk style="font-size:8;">SWIFT CODE</chunk>
+            </cell>
+            <cell>
+                <chunk style="font-size:8;">BOSP SBSB</chunk>
+            </cell>
+        </row>
+    </table>
+    <newline />
+    @*<paragraph style="font-size:9;font-weight:bold;">
+            <chunk>TERMS AND CONDITIONS</chunk>
+        </paragraph>
+        <paragraph style="font-size:9;">
+            <chunk> This is a prepaid product service, payment will need to be received by the 1st of each month to ensure continuation of this service.</chunk>
+        </paragraph>*@
+</itext>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

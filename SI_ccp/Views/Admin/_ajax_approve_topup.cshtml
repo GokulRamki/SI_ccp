@@ -1,0 +1,149 @@
+﻿@using MvcPaging
+@model IPagedList<SI_ccp.Models.topup_report_model>
+
+@if (Model.Count > 0)
+{
+
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>
+                    Company Name
+                </th>
+                <th>
+                    Credit Amount
+                </th>
+                <th>
+                    Payment Type
+                </th>
+                <th>
+                    Mobile No
+                </th>
+                <th>
+                    E-Mail
+                </th>
+                <th>
+                    Date/Time
+                </th>
+                <th>
+                    Invoice No
+                </th>
+                <th>
+                    Account Order No
+                </th>
+                <th>
+                    Internal Ref No
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    Recharge Status
+                </th>
+                <th>
+                    Action
+                </th>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+{
+    <tr id="tr_@item.temp_topup_id">
+        <td>
+            @item.company_name
+        </td>
+        <td>
+            $ &nbsp;@item.credit_amount
+        </td>
+        <td>
+            @item.payment_type_name
+        </td>
+        <td>
+            @item.mobile_number
+        </td>
+        <td>
+            @item.email
+        </td>
+        <td>
+            @item.credited_on
+        </td>
+
+        <td>
+            @item.invoice
+        </td>
+        <td>
+            @item.account_order_no
+        </td>
+        <td>
+            @item.internal_ref_no
+        </td>
+        <td>
+            @item.trans_desc
+        </td>
+
+        @if (item.approval_status_id == 2 || item.approval_status_id == 3)
+        {
+            <td>
+                <span class="spa_@item.temp_topup_id">@String.Concat(item.approval_status, "d")</span>
+            </td>
+        }
+        else
+        {
+            <td>
+                <span class="spa_@item.temp_topup_id">@item.approval_status</span>
+            </td>
+        }
+
+        @if (item.approval_status_id == 1)
+        {
+            <td>
+                @Html.DropDownList("_addlstatus", new SelectList(ViewBag.ApproveStatusList, "id", "status", item.approval_status_id), new { @class = "_addl_status ", @id = "ddl_" + @item.temp_topup_id, @name = "ddl_" + @item.temp_topup_id })
+                <img id="img_@item.temp_topup_id" style="display:none;" src="~/img/select2-spinner.gif" />
+            </td>
+        }
+        else
+        {
+            <td>
+                @Html.DropDownList("_addlstatus", new SelectList(ViewBag.ApproveStatusList, "id", "status", item.approval_status_id), new { @class = "_addl_status disabled", @id = "ddl_" + @item.temp_topup_id, @name = "ddl_" + @item.temp_topup_id, disabled = "disabled" })
+            </td>
+        }
+
+    </tr>
+}
+
+        </tbody>
+    </table>
+    <div class="pager1">
+        @Html.Raw(Ajax.Pager(
+            new Options
+            {
+                PageSize = Model.PageSize,
+                TotalItemCount = Model.TotalItemCount,
+                CurrentPage = Model.PageNumber,
+                ItemTexts = new ItemTexts() { Next = "Next", Previous = "Previous", Page = "P" },
+                ItemIcon = new ItemIcon() { First = "icon-backward", Previous = "icon-chevron-left", Next = "icon-chevron-right", Last = "icon-forward" },
+                TooltipTitles = new TooltipTitles() { Next = "Next page", Previous = "Previous page", Page = "Page {0}." },
+                Size = Size.normal,
+                Alignment = Alignment.centered,
+                IsShowControls = true,
+                IsShowFirstLast = true,
+                CssClass = ""
+            },
+            new AjaxOptions
+            {
+                UpdateTargetId = "grid-list",
+                OnBegin = "beginPaging",
+                OnSuccess = "successPaging",
+                OnFailure = "failurePaging"
+            }, new { controller = "Admin", action = "approve_topup", sTransFrom = ViewData["sTransFrom"], sName = ViewData["sName"], sTransTo = ViewData["sTransTo"], Status = ViewData["Status"] }))
+        <div class="well">
+            Showing <span class="badge badge-success">@Model.ItemStart</span> to <span class="badge badge-success">@Model.ItemEnd</span>
+            of <span class="badge badge-info">@Model.TotalItemCount</span> entries
+        </div>
+    </div>
+
+}
+else
+{
+    <div style="width:100%; text-align:center; padding:10px 0px 10px 0px;">Records Not found!</div>
+}

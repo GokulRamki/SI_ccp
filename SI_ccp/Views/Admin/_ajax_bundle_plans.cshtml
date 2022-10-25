@@ -1,0 +1,105 @@
+﻿@using MvcPaging
+@model IPagedList<SI_ccp.Models.BundlePlanModel>
+
+@if (Model.Count > 0)
+{
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>
+                    Bundle ID
+                </th>
+
+                <th>
+                    Bundle Plan Name
+                </th>
+                <th>
+                    Bundle Type
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    Status
+                </th>
+                @*<th>
+                        Selfcare Plan?
+                    </th>*@
+                <th>
+                    Edit
+                </th>
+                <th>
+                    Delete
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.bundlePlan.bundle_id
+                    </td>
+                    <td>
+                        @item.bundlePlan.bundle_name
+                    </td>
+                    <td>
+                        @item.bundleType
+                    </td>
+                    <td>
+                        @item.bundlePlan.description
+                    </td>
+                    <td>
+                        @(item.bundlePlan.is_active == true ? "Active" : "Inactive")
+                    </td>
+                    @*<td>
+                            @(item.bundlePlan.is_selfcare == true ? "Yes" : "No")
+                        </td>*@
+                    <td>
+                        <a href="@Url.Action("EditBundlePlan", "Admin", new { id = item.bundlePlan.id })">
+                            <img src="~/img/grid/edit-icon.png" border="0" alt="Edit" />
+                        </a>
+                    </td>
+                    <td>
+                        <a class="delete-link" href="@Url.Action("DeleteBundlePlan", "Admin", new { id = item.bundlePlan.id })">
+                            <img src="~/img/grid/delete-icon.png" border="0" alt="Delete" />
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="page1">
+        @Html.Raw(Ajax.Pager(
+            new Options
+            {
+                PageSize = Model.PageSize,
+                TotalItemCount = Model.TotalItemCount,
+                CurrentPage = Model.PageNumber,
+                ItemTexts = new ItemTexts() { Next = "Next", Previous = "Previous", Page = "" },
+                ItemIcon = new ItemIcon() { First = "icon-backward", Previous = "icon-chevron-left", Next = "icon-chevron-right", Last = "icon-forward" },
+                TooltipTitles = new TooltipTitles() { Next = "Next page", Previous = "Previous page", Page = "Page {0}." },
+                Size = Size.normal,
+                Alignment = Alignment.centered,
+                IsShowControls = true,
+                IsShowFirstLast = true,
+                CssClass = ""
+            },
+            new AjaxOptions
+            {
+                UpdateTargetId = "grid-list",
+                OnBegin = "beginPaging",
+                OnSuccess = "successPaging",
+                OnFailure = "failurePaging"
+            }, new { controller = "Admin", action = "BundlePlans", bundleName = ViewData["bundleName"], bundleID = ViewData["bundleID"], bTypeId = ViewData["bTypeId"] }))
+        <div class="well">
+            Showing <span class="badge bg-color-greenLight">@Model.ItemStart</span> to <span class="badge bg-color-redLight">@Model.ItemEnd</span>
+            of <span class="badge bg-color-blueLight">@Model.TotalItemCount</span> entries
+        </div>
+    </div>
+}
+else
+{
+    <div style="width: 100%; text-align: center; padding: 10px 0px 10px 0px;">Records Not found!</div>
+}

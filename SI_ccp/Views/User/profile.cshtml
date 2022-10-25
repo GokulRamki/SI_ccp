@@ -1,0 +1,147 @@
+﻿@model SI_ccp.Models.tbl_user
+
+@{
+    ViewBag.Title = "Profile";
+}
+
+
+@if (TempData["successmsg"] != null)
+{
+    <div class="alert alert-success fade in">
+        <button class="close" data-dismiss="alert">
+            ×
+        </button>
+        <i class="fa-fw fa fa-check"></i>
+        <strong>Success</strong> @TempData["successmsg"].
+    </div>
+}
+
+<section id="widget-grid" style="margin: 0px auto;">
+    <!-- START ROW -->
+    <div class="row">
+
+        <!-- NEW COL START -->
+        <article class="col-sm-12 col-md-12 col-lg-6" style="float: none; margin: 5px auto;">
+
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget" id="wid-id-3" data-widget-editbutton="false" data-widget-custombutton="false">
+
+                <header>
+                    <span class="widget-icon"><i class="fa fa-edit"></i></span>
+                    <h2>Profile Information </h2>
+
+                </header>
+
+                <!-- widget div-->
+                <div>
+
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
+
+                    </div>
+                    <!-- end widget edit box -->
+                    <!-- widget content -->
+                    <div class="widget-body no-padding">
+                        @using (Html.BeginForm("profile", "User", FormMethod.Post, new { enctype = "multipart/form-data", id = "form-update_user", @class = "smart-form" }))
+                        {
+                            @Html.ValidationSummary(true)
+                            @Html.HiddenFor(model => model.id)
+                            @Html.HiddenFor(model => model.created_on)
+                            @Html.HiddenFor(model => model.isdeleted)
+                            @Html.HiddenFor(model => model.email)
+                            @Html.HiddenFor(model => model.company_id)
+                            @Html.HiddenFor(model => model.isactive)
+
+                            <header>
+                                Profile Information
+                            </header>
+
+                            <fieldset>
+                                <div class="row">
+                                    <section class="col col-6">
+                                        <label class="label">First Name</label>
+                                        <label class="input">
+                                            @Html.TextBoxFor(model => model.first_name, new { placeholder = "First Name", maxlength = 50 })
+                                            @Html.ValidationMessageFor(model => model.first_name)
+                                        </label>
+                                    </section>
+                                    <section class="col col-6">
+                                        <label class="label">Last Name</label>
+                                        <label class="input">
+                                            @Html.TextBoxFor(model => model.last_name, new { placeholder = "Last Name", maxlength = 50 })
+                                            @Html.ValidationMessageFor(model => model.last_name)
+                                        </label>
+                                    </section>
+                                </div>
+                                <div class="row">
+                                    <section class="col col-6">
+                                        <label class="label">Email</label>
+                                        <label class="input">
+                                            <i class="icon-append fa fa-envelope-o"></i>
+                                            @Html.DisplayFor(model => model.email)
+                                            @Html.ValidationMessageFor(model => model.email)
+                                        </label>
+                                    </section>
+                                    <section class="col col-6">
+                                        <label class="label">Password</label>
+                                        <label class="input">
+                                            @Html.EditorFor(model => model.password, new { placeholder = "Password", maxlength = 50 })
+                                            @Html.ValidationMessageFor(model => model.password)
+                                        </label>
+                                    </section>
+                                </div>
+
+
+                                <div class="row">
+                                    <section class="col col-6">
+                                        <label class="label">Mobile Number</label>
+                                        <label class="input">
+                                            @Html.TextBoxFor(model => model.msisdn_number, new { placeholder = "Mobile Number", maxlength = 50 })
+                                            @Html.ValidationMessageFor(model => model.msisdn_number)
+                                        </label>
+                                    </section>
+                                </div>
+                                <div class="row">
+                                    @*<section class="col col-6">
+                                        <label><b>Status</b></label>
+                                    </section>
+                                    <section class="col col-6">
+                                        <div class="inline-group">
+                                            <label class="radio">
+                                                @Html.RadioButtonFor(model => model.isactive, true, new { @checked = "checked" })
+                                                <i></i>active
+                                            </label>
+                                            <label class="radio" style="margin-top:10px;">
+                                                @Html.RadioButtonFor(model => model.isactive, false, new { })
+                                                <i></i>inactive
+                                            </label>
+                                        </div>
+                                    </section>*@
+                                </div>
+                            </fieldset>
+
+                            <footer>
+                                <button type="submit" class="btn btn-primary" id="btnSubmit">
+                                    Submit
+                                </button>
+                            </footer>
+                        }
+                    </div>
+                    <!-- end widget content -->
+
+                </div>
+                <!-- end widget div -->
+
+            </div>
+            <!-- end widget -->
+        </article>
+        <!-- END COL -->
+    </div>
+
+    <!-- END ROW -->
+
+
+</section>
+
+

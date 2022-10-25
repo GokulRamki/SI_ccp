@@ -1,0 +1,280 @@
+﻿@{
+
+    string action = ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
+
+    string cntr_name = ViewContext.Controller.ValueProvider.GetValue("controller").RawValue.ToString();
+
+    string main_class = string.Empty;
+
+    if (action == "companies" || action == "create_company" || action == "update_company")
+    {
+        main_class = "companies";
+    }
+
+    if (action == "staffs_msisdn" || action == "import_staff_topup" || action == "staff_process")
+    {
+        main_class = "staffs_msisdn";
+    }
+
+    if (action == "company_transactions" || action == "staffs_transactions" || action == "CompanyAccountExpiry" || action == "CompanyAccountLowBalance")
+    {
+        main_class = "reports";
+    }
+
+    if (action == "users" || action == "user_details")
+    {
+        main_class = "users";
+    }
+
+    if (action == "SalesPersonDetails" || action == "CreateSalesPerson" || action == "EditSalesPerson")
+    {
+        main_class = "SalesPersonDetails";
+    }
+
+    if (action == "BundlePlans" || action == "CreateBundlePlan" || action == "EditBundlePlan")
+    {
+        main_class = "BundlePlans";
+    }
+
+    if (action == "create_invoice")
+    {
+        main_class = "Invoice";
+    }
+
+}
+
+<aside id="left-panel" style="margin-top: 30px;">
+
+    <!-- user info -->
+    <div class="login-info">
+        <span>
+            <!-- User image size is adjusted inside CSS, it should stay as it -->
+            @if (Session["admin_id"] != null && Session["role_id"] != null )
+            {
+                if (Session["role_id"].ToString() == "1" || Session["role_id"].ToString() == "3")
+                {
+                    <a href="void:javascript(0);" id="show-shortcut">
+                        <i class="fa fa-lg fa-fw fa-user"></i>
+                        <span>Admin</span>
+                    </a>
+                }
+
+            }
+            else
+            {
+                <a href="void:javascript(0);" title="Dashboard">
+                    <i class="fa fa-lg fa-fw fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+            }
+        </span>
+    </div>
+    <!-- end user info -->
+    <!-- MENUS -->
+    <nav>
+
+
+        <ul>
+
+            @if (Session["admin_id"] != null && Session["role_id"] != null)
+            {
+                if (Session["role_id"].ToString() == "1")
+                {
+
+                    <li class="@("companies".Equals(main_class) ? "open" : "")">
+                        <a href="javascript:void(0)" title="Company"><i class="fa fa-lg fa-fw fa-user"></i><span class="menu-item-parent">Companies</span></a>
+                        <ul style="@("companies".Equals(main_class) ? "display: block;" : "")">
+                            <li class="@("companies".Equals(action) ? "active" : "")">
+                                <a href="@Url.Action("companies", "Admin")">Companies</a>
+                            </li>
+                            <li class="@("create_company".Equals(action) ? "active" : "")">
+                                <a href="@Url.Action("create_company", "Admin")">Add New Company</a>
+                            </li>
+
+                        </ul>
+                    </li>
+
+                    <li class="@("topup_transactions".Equals(action) ? "active" : "")"><a href="@Url.Action("topup_transactions", "Admin")"><i class="fa fa-lg fa-fw fa-level-up "></i><span class="menu-item-parent">Topup Reports</span></a></li>
+
+                    <li class="@("staff_topup_transactions".Equals(action) ? "active" : "")"><a href="@Url.Action("staff_topup_transactions", "Admin")"><i class="fa fa-lg fa-fw fa-level-up "></i><span class="menu-item-parent">Staff Topup Reports</span></a></li>
+
+                    <li class="@("reports".Equals(main_class) ? "open" : "")">
+                        <a href="javascript:void(0)" title="Company"><i class="fa fa-lg fa-fw fa-home"></i><span class="menu-item-parent">Reports</span></a>
+                        <ul style="@("reports".Equals(main_class) ? "display: block;" : "")">
+                            <li class="@("CompanyAccountExpiry".Equals(action) ? "active" : "")">
+                                <a href="@Url.Action("CompanyAccountExpiry", "Admin")">Company Account Expiry</a>
+                            </li>
+                            <li class="@("CompanyAccountLowBalance".Equals(action) ? "active" : "")">
+                                <a href="@Url.Action("CompanyAccountLowBalance", "Admin")">Company Low Balance</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="@("users".Equals(main_class) ? "open" : "")">
+                        <a href="javascript:void(0)" title="Company"><i class="fa fa-lg fa-fw fa-user"></i><span class="menu-item-parent">Users</span></a>
+                        <ul style="@("users".Equals(main_class) ? "display: block;" : "")">
+                            <li class="@("users".Equals(action) ? "active" : "")">
+                                <a href="@Url.Action("users", "Admin")">Users</a>
+                            </li>
+                            <li class="@("".Equals(action) ? "active" : "")">
+                                <a href="@Url.Action("user_details", "Admin")">Add New User</a>
+                            </li>
+
+                        </ul>
+                    </li>
+
+                    <li class="@("SalesPersonDetails".Equals(action) ? "active" : "")">
+                        <a href="@Url.Action("SalesPersonDetails", "Admin")"><i class="fa fa-lg fa-fw fa-reorder"></i><span class="menu-item-parent">Sales Person Details</span></a>
+                    </li>
+
+                    <li class="@("BundlePlans".Equals(action) ? "active" : "")">
+                        <a href="@Url.Action("BundlePlans", "Admin")"><i class="fa fa-lg fa-fw fa-reorder"></i><span class="menu-item-parent">Bundle Plans</span></a>
+                    </li>
+
+                    if (Session["role_id"].ToString() == "1")
+                    {
+
+                        <li class="@("Audit_log".Equals(action) ? "active" : "")">
+                            <a href="@Url.Action("Audit_log", "Admin")"><i class="fa fa-lg fa-fw  fa-user"></i><span class="menu-item-parent">Audit log</span></a>
+                        </li>
+
+                    }
+
+                }
+                else
+                {
+
+                    if (ViewBag.Menus_val != null)
+                    {
+
+                        foreach (var M in ViewBag.Menus_val)
+                        {
+                            if (action == "topup_transactions")
+                            {
+                                main_class = "topup_transactions";
+                            }
+
+                            if (action == "staff_topup_transactions")
+                            {
+                                main_class = "staff_topup_transactions";
+                            }
+
+                            if (action == "approve_topup")
+                            {
+                                main_class = action;
+                            }
+
+                            if (action == "companies" || action == "create_company" || action == "update_company")
+                            {
+                                main_class = "companies";
+                            }
+
+                            <li class="@(M.menu.Equals(main_class) ? "active" : "")">
+                                <a href="@Url.Action(M.menu, "Admin")" title="@M.menu_name">
+                                    <span class="menu-item-parent">@M.menu_name</span>
+                                </a>
+                            </li>
+                        }
+                    }
+                }
+
+            }
+
+            @if (Session["company_id"] != null)
+            {
+                <li class="@("dashboard".Equals(action) ? "active" : "")"><a href="@Url.Action("dashboard", "Company")"><i class="fa fa-lg fa-fw fa-home"></i><span class="menu-item-parent">Dashboard</span></a></li>
+
+                <li class="@("users".Equals(main_class) ? "open" : "")">
+                    <a href="javascript:void(0)" title="Company"><i class="fa fa-lg fa-fw fa-user"></i><span class="menu-item-parent">Users</span></a>
+                    <ul style="@("users".Equals(main_class) ? "display: block;" : "")">
+                        <li class="@("users".Equals(action) ? "active" : "")">
+                            <a href="@Url.Action("users", "Company")">Users</a>
+                        </li>
+                        <li class="@("create_user".Equals(action) ? "active" : "")">
+                            <a href="@Url.Action("create_user", "Company")">Add New User</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="@("staffs_msisdn".Equals(main_class) ? "open" : "")">
+                    <a href="javascript:void(0)" title="Company"><i class="fa fa-lg fa-fw fa-level-up"></i><span class="menu-item-parent">Staff Topup</span></a>
+
+                    <ul style="@("staffs_msisdn".Equals(main_class) ? "display: block;" : "")">
+
+                        @*  @if (Session["import_access"] != null)
+                    {
+                        <li class="@("import_staff_topup".Equals(action) ? "active" : "")">
+                            <a href="@Url.Action("import_staff_topup", "company")">Import staff topup</a>
+                        </li>
+                    }*@
+
+
+                        <li class="@("staff_process".Equals(action) ? "active" : "")">
+                            <a href="@Url.Action("staff_process", "Company")">Staff Topup Process</a>
+                        </li>
+                        <li class="@("staffs_msisdn".Equals(action) ? "active" : "")">
+                            <a href="@Url.Action("staffs_msisdn", "Company")">Staff Topup</a>
+                        </li>
+                    </ul>
+
+                </li>
+
+                <li class="@("staffs_transactions".Equals(action) ? "active" : "")"><a href="@Url.Action("staffs_transactions", "Company")"><i class="fa fa-lg fa-fw fa-level-up "></i><span class="menu-item-parent">Staff Transactions</span></a></li>
+
+                <li class="@("profile".Equals(action) ? "active" : "")"><a href="@Url.Action("profile", "Company")"><i class="fa fa-lg fa-fw fa-user "></i><span class="menu-item-parent">Profile</span></a></li>
+
+                @*<li class="@("reports".Equals(main_class) ? "open" : "")">
+                <a href="javascript:void(0)" title="Company"><i class="fa fa-lg fa-fw fa-home"></i><span class="menu-item-parent">Reports</span></a>
+                <ul style="@("reports".Equals(main_class) ? "display: block;" : "")">
+                    <li class="@("company_transactions".Equals(action) ? "active" : "")">
+                        <a href="@Url.Action("company_transactions", "Company")">Company Report</a>
+                    </li>
+                    <li class="@("staffs_transactions".Equals(action) ? "active" : "")">
+                        <a href="@Url.Action("staffs_transactions", "Company")">Staff Transactions</a>
+                    </li>
+                </ul>
+            </li>*@
+
+                <li class="@("Invoice".Equals(main_class) ? "open" : "")">
+                    <a href="javascript:void(0)" title="Company"><i class="fa fa-lg fa-fw fa-user"></i><span class="menu-item-parent">Invoice</span></a>
+                    <ul style="@("Invoice".Equals(main_class) ? "display: block;" : "")">
+                        <li class="@("Invoice".Equals(action) ? "active" : "")">
+                            <a href="@Url.Action("create_invoice", "Company")">Create Invoice</a>
+                        </li>
+
+                    </ul>
+                </li>
+            }
+
+            @if (Session["user_id"] != null)
+            {
+                <li class="@("staffs_msisdn".Equals(main_class) ? "open" : "")">
+                    <a href="javascript:void(0)" title="Company"><i class="fa fa-lg fa-fw fa-level-up"></i><span class="menu-item-parent">Staff Topup</span></a>
+
+                    <ul style="@("staffs_msisdn".Equals(main_class) ? "display: block;" : "")">
+                        @if (Session["import_staff"].ToString() == "True")
+                        {
+
+                            <li class="@("import_staff_topup".Equals(action) ? "active" : "")">
+                                <a href="@Url.Action("import_staff_topup", "User")">Import staff topup</a>
+                            </li>
+                        }
+                        <li class="@("staffs_msisdn".Equals(action) ? "active" : "")">
+                            <a href="@Url.Action("staffs_msisdn", "User")">Staff Topup</a>
+                        </li>
+                    </ul>
+
+                </li>
+
+                <li class="@("profile".Equals(action) ? "active" : "")"><a href="@Url.Action("profile", "User")"><i class="fa fa-lg fa-fw fa-user "></i><span class="menu-item-parent">Profile</span></a></li>
+
+
+            }
+
+        </ul>
+
+    </nav>
+
+    <span class="minifyme"><i class="fa fa-arrow-circle-left hit"></i></span>
+
+</aside>

@@ -1,0 +1,108 @@
+﻿
+@using MvcPaging
+@model IPagedList<SI_ccp.Models.ccp_AuditModel>
+
+@if (Model.Count > 0)
+{
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>
+                    User Name
+                </th>
+                <th>
+                    Role
+                </th>
+                <th>
+                    Category
+                </th>
+                <th>
+                    Action
+                </th>
+                <th>
+                    IP Address
+                </th>
+                <th>
+                    Date
+                </th>
+                <th>
+                    Access From
+                </th>
+                <th>
+                    Msisdn
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.user_name
+                    </td>
+                    <td>
+                        @(item.role_id == 0 ? "Company" : item.role_name)
+
+                    </td>
+                    <td>
+                        @item.rpt_cat_name
+                    </td>
+                    <td>
+                        @item.action_name
+                    </td>
+                    <td>
+                        @item.ip_address
+                    </td>
+                    <td>
+                        @item.created_on
+                    </td>
+                    <td>
+                        @item.access_from
+                    </td>
+                    <td>
+                        @(string.IsNullOrEmpty(item.msisdn) ? "NA" : item.msisdn)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="page1">
+        @Html.Raw(Ajax.Pager(
+            new Options
+            {
+                PageSize = Model.PageSize,
+                TotalItemCount = Model.TotalItemCount,
+                CurrentPage = Model.PageNumber,
+                ItemTexts = new ItemTexts() { Next = "Next", Previous = "Previous", Page = "" },
+                ItemIcon = new ItemIcon() { First = "icon-backward", Previous = "icon-chevron-left", Next = "icon-chevron-right", Last = "icon-forward" },
+                TooltipTitles = new TooltipTitles() { Next = "Next page", Previous = "Previous page", Page = "Page {0}." },
+                Size = Size.normal,
+                Alignment = Alignment.centered,
+                IsShowControls = true,
+                IsShowFirstLast = true,
+                CssClass = ""
+            },
+            new AjaxOptions
+            {
+                UpdateTargetId = "grid-list",
+                OnBegin = "beginPaging",
+                OnSuccess = "successPaging",
+                OnFailure = "failurePaging"
+            }, new { controller = "Admin", action = "Audit_log", username = ViewData["username"], roleid = ViewData["roleid"], cat_id = ViewData["cat_id"], act_id = ViewData["act_id"], ip_add = ViewData["ip_add"], aces_from = ViewData["aces_from"], sdate = ViewData["sdate"], edate = ViewData["edate"], msisdn = ViewData["msisdn"] }))
+        <div class="well">
+            Showing <span class="badge bg-color-greenLight">@Model.ItemStart</span> to <span class="badge bg-color-redLight">@Model.ItemEnd</span>
+            of <span class="badge bg-color-blueLight">@Model.TotalItemCount</span> entries
+        </div>
+    </div>
+}
+else
+{
+    <div style="width:100%; text-align:center; padding:10px 0px 10px 0px;">Records Not found!</div>
+}
+<style>
+    th {
+        text-align: center;
+    }
+</style>

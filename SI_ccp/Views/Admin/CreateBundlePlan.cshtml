@@ -1,0 +1,349 @@
+﻿@model SI_ccp.Models.BundlePlan_Model
+@{
+    ViewBag.Title = "Create Bundle Plan";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<section--! id="widget-grid" style="margin: 0px auto;">
+    <!-- START ROW -->
+
+    <div class="row">
+
+        <!-- NEW COL START -->
+        <article class="col-sm-12 col-md-12 col-lg-6" style="float: none; margin: 5px auto;">
+
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget" id="wid-id-3" data-widget-editbutton="false" data-widget-custombutton="false">
+
+                <header>
+                    <span class="widget-icon"><i class="fa fa-edit"></i></span>
+                    <h2>Create Bundle Plan </h2>
+                </header>
+                <div>
+
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
+                    </div>
+
+                    <!-- widget content -->
+                    <div class="widget-body no-padding">
+                        @if (ViewBag.fMsg != null)
+                        {
+                            <div class="alert alert-warning fade in">
+                                <button class="close" data-dismiss="alert">
+                                  
+                                </button>
+                                <i class="fa-fw fa fa-check"></i>
+                                <strong>Warning ::</strong> @ViewBag.fMsg.
+                            </div>
+                        }
+                        @using (Html.BeginForm("CreateBundlePlan", "Admin", FormMethod.Post, new { enctype = "multipart/form-data", id = "form-CreateBundlePlan", @class = "smart-form", novalidate = "novalidate" }))
+                        {
+                            @Html.ValidationSummary(true)
+                    <fieldset>
+                        <div class="row">
+                            <section class="col col-6">
+                                <b>Bundle ID:</b>&nbsp;<span style="color:red">*</span>
+                                <label class="input">
+                                    @Html.TextBoxFor(model => model.bundleId, new { Value = "" })
+                                    @Html.ValidationMessageFor(model => model.bundleId)
+                                </label>
+                            </section>
+                            <section class="col col-6">
+                                <b>Bundle Name:</b><span style="color:red">*</span>
+                                <label class="input">
+                                    @Html.TextBoxFor(model => model.planName)
+                                    @Html.ValidationMessageFor(model => model.planName)
+                                </label>
+                            </section>
+                        </div>
+                        <div class="row">
+                            <section class="col col-6">
+                                <b>Bundle Price:</b><span style="color:red">*</span>
+                                <label class="input">
+                                    @Html.TextBoxFor(model => model.Price, new { Value = "" })
+                                    @Html.ValidationMessageFor(model => model.Price)
+                                </label>
+                            </section>
+
+                            <section class="col col-6">
+                                <b>Validity:</b><span style="color:red">*</span>
+                                <label class="input">
+                                    @Html.TextBoxFor(model => model.Validity)
+                                    @Html.ValidationMessageFor(model => model.Validity)
+                                </label>
+                            </section>
+                        </div>
+
+                        <div class="row">
+                            <section class="col col-6">
+                                <b>Description:</b>
+                                <label class="input">
+                                    @Html.TextAreaFor(model => model.Description, new { @style = "width:99.5%;height:50px;" })
+                                    @Html.ValidationMessageFor(model => model.Description)
+                                </label>
+                            </section>
+
+                            @*<section class="col col-6" style="visibility: hidden">
+                <b>BTYPE:</b>
+                <label class="select">
+                    @Html.TextBoxFor(model => model.btype, new { @style = "width: 50px", maxlength = "1", @class = "valid" })
+                    @Html.ValidationMessageFor(model => model.btype)
+                </label>
+            </section>*@
+                        </div>
+                        <div class="row">
+                            <section class="col col-6">
+                                <b>Bundle Type:</b><span style="color:red">*</span>
+                                <label class="select">
+                                    <i class="icon-append fa fa-envelope-o"></i>
+                                    @Html.DropDownListFor(model => model.bundle_type_id, new SelectList(ViewBag.BundleTypeList, "id", "bundle_type"), "-- Select --")
+                                </label>
+                            </section>
+                        </div>
+
+                        <div class="row">
+                            <section class="col col-6">
+                                <b>Company Name</b>
+                                <label class="input">
+                                    @Html.HiddenFor(model => model.comp_id)
+                                    @Html.TextBox("companyname")
+                                </label>
+                            </section>
+                            <button type="button" class="btn btn-primary" onclick="selOpt()">Add</button>
+
+                        </div>
+                        <label class="op"></label>
+
+                        @* <div class="row" id="s1">
+                <section class="col col-6">
+                    <b>Company Name</b>
+                    <label class="select">
+                        @Html.DropDownListFor(model => model.companyname, new SelectList(ViewBag.Company, "id", "company_name"), "--Select Company Name--")
+                    </label>
+
+                </section>
+
+                <button type="add" class="btn btn-primary"  onclick="selOpt()">
+                    Add
+                </button>
+
+
+
+
+        </div>*@
+                        <div class="row">
+                            <section class="col col-3">
+                                <b>Active Status:</b>
+                            </section>
+                            <section class="col col-3">
+                                @Html.CheckBoxFor(model => model.isActive)
+                            </section>
+                            @*<section class="col col-3">
+                <b>IsSelfcare</b>
+            </section>
+            <section class="col col-3">
+                @Html.CheckBoxFor(model => model.isSelfcare)
+            </section>*@
+                        </div>
+
+                        @*Selfcare not in use*@
+                        <div id="divSelfcarePan" style="display:none;">
+                            <div class="row">
+                                <section class="col col-6">
+                                    <b>Account Type:</b>&nbsp;
+                                    <label class="input">
+                                        @Html.TextBoxFor(model => model.AccountType)
+                                        @Html.ValidationMessageFor(model => model.AccountType)
+                                    </label>
+                                </section>
+                                <section class="col col-6">
+                                    <b>Orderby:</b>
+                                    <label class="input">
+                                        @Html.TextBoxFor(model => model.orderby, new { Value = "" })
+                                        @Html.ValidationMessageFor(model => model.orderby)
+                                    </label>
+                                </section>
+                            </div>
+                            <div class="row">
+                                <section class="col col-6">
+                                    <b>SMS Account Type:</b>
+                                    <label class="input">
+                                        @Html.TextBoxFor(model => model.SmsAccountType)
+                                        @Html.ValidationMessageFor(model => model.SmsAccountType)
+                                    </label>
+                                </section>
+                                <section class="col col-6">
+                                    <b>Voice Account Type:</b>
+                                    <label class="input">
+                                        @Html.TextBoxFor(model => model.VoiceAccountType)
+                                        @Html.ValidationMessageFor(model => model.VoiceAccountType)
+                                    </label>
+                                </section>
+                            </div>
+                            <div class="row">
+                                <section class="col col-6">
+                                    <b>IDD Account Type:</b>
+                                    <label class="input">
+                                        @Html.TextBoxFor(model => model.IddAccountType)
+                                        @Html.ValidationMessageFor(model => model.IddAccountType)
+                                    </label>
+                                </section>
+                                <section class="col col-6">
+                                    <b>Voice Size:</b>
+                                    <label class="input">
+                                        @Html.TextBoxFor(model => model.voiceSize)
+                                        @Html.ValidationMessageFor(model => model.voiceSize)
+                                    </label>
+                                </section>
+                            </div>
+                            <div class="row">
+                                <section class="col col-6">
+                                    <b>SMS Count:</b>
+                                    <label class="input">
+                                        @Html.TextBoxFor(model => model.smsCount)
+                                        @Html.ValidationMessageFor(model => model.smsCount)
+                                    </label>
+                                </section>
+                                <section class="col col-6">
+                                    <b>Size:</b>
+                                    <label class="input">
+                                        @Html.TextBoxFor(model => model.Size)
+                                        @Html.ValidationMessageFor(model => model.Size)
+                                    </label>
+                                </section>
+                            </div>
+                            <div class="row">
+                                <section class="col col-3">
+                                    <b>IsOnlyData:</b>
+                                </section>
+                                <section class="col col-3">
+                                    @Html.CheckBoxFor(model => model.isOnlyData)
+                                </section>
+                                <section class="col col-3">
+                                    <b>IsPostpaid</b>
+                                </section>
+                                <section class="col col-3">
+                                    @Html.CheckBoxFor(model => model.isPostpaid)
+                                </section>
+                            </div>
+                            <div class="row">
+                                <section class="col col-3">
+                                    <b>IsVoice</b>
+                                </section>
+                                <section class="col col-3">
+                                    @Html.CheckBoxFor(model => model.isVoice)
+                                </section>
+
+                            </div>
+                        </div>
+                    </fieldset>
+                            <footer>
+                                <button type="button" class="btn btn-primary" onclick="window.location='@Url.Action("BundlePlans", "Admin")'">Back</button>
+                                &nbsp;&nbsp;<button type="submit" class="btn btn-primary">
+                                    Submit
+                                </button>
+                            </footer>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+            <!-- end widget -->
+
+
+        </article>
+        <!-- END COL -->
+
+    </div>
+
+    <!-- END ROW -->
+    </section>
+
+    @section Scripts {
+
+        <script type="text/javascript">
+
+            $(document).ready(function () {
+
+                $('#companyname').autocomplete({
+                    source: function (request, response) {
+                        $.ajax({
+                            url: "/Admin/GetCompanyNameAutoComplete",
+                            data: { name: request.term },
+                            dataType: 'json',
+                            type: 'GET',
+                            async: false,
+                            success: function (data) {
+                                if (data.length > 0) {
+                                    response($.map(data,
+                                        function (item) {
+                                            return {
+                                                company_name: item.company_name,
+                                                label: item.company_name,
+                                                id: item.id
+                                            }
+
+                                        }))
+                                }
+                                else {
+
+                                }
+                            }
+                        })
+
+                    },
+
+                    select: function (event, ui) {
+
+                        debugger
+                        $('#companyname').val(ui.item.company_name);
+                        $('#comp_id').val(ui.item.id);
+
+
+                        return false;
+                    }
+                })
+            });
+
+            //$('#isSelfcare').on('click', function () {
+            //    showSelfcarePan();
+            //});
+
+            //function showSelfcarePan() {
+            //    var sVal = $('#isSelfcare').is(':checked');
+            //    if (sVal) {
+            //        $('#divSelfcarePan').show();
+
+            //    }
+            //    else {
+            //        $('#divSelfcarePan').hide();
+            //        $('#orderby').val('');
+            //        $('#AccountType').val('');
+            //        $('#SmsAccountType').val('');
+            //        $('#IddAccountType').val('');
+            //        $('#VoiceAccountType').val('');
+            //        $('#voiceSize').val('');
+            //        $('#smsCount').val('');
+            //        $('#Size').val('');
+            //        $('#isOnlyData').prop('checked',false);
+            //        $('#isVoice').prop('checked',false);
+            //        $('#isPostpaid').prop('checked',false);
+            //    }
+            //}
+        </script>
+
+        <script type="text/javascript">
+            
+            function selOpt() {
+                debugger
+                label = document.querySelector('#companyname');
+                op = label.value;
+                document.querySelector('.op').textContent = op;
+         }
+        </script>
+
+      
+    }

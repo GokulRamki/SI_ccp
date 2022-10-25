@@ -1,0 +1,86 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+@{
+    ViewBag.Title = "TechIssue";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>CUG::Admin </title>
+    <!-- Basic Styles -->
+    <link rel="stylesheet" type="text/css" media="screen" href="@Url.Content("~/css/bootstrap.min.css")">
+    <!-- SmartAdmin Styles : Please note (smartadmin-production.css) was created using LESS variables -->
+    <link rel="stylesheet" type="text/css" media="screen" href="@Url.Content("~/css/smartadmin-production.css")">
+
+<style type="text/css">
+    #timeout #main {
+background: #fff;
+margin: 0;
+}
+</style>
+</head>
+<body id="timeout" class="animated fadeInDown">
+<header id="header" style="height:100px;">
+        <!--<span id="logo"></span>-->
+
+        <div id="logo-group">
+            <span id="logo">
+                <img src="@Url.Content("~/images/bmobilelogo.png")" style="width:145px;" alt="BmobileAdmin">
+            </span>
+
+            <!-- END AJAX-DROPDOWN -->
+        </div>    
+    </header>
+<div id="main">
+    <section id="widget-grid" style="margin: 0px auto;">
+        <!-- START ROW -->
+        <div class="row">
+
+            <!-- NEW COL START -->
+            <article class="col-sm-12 col-md-12 col-lg-6" style="float: none; margin: 5px auto;">
+
+                <!-- Widget ID (each widget will need unique ID)-->
+                <div class="jarviswidget" id="wid-id-3" data-widget-editbutton="false" data-widget-custombutton="false">
+                    
+                    <header>
+
+                        <h2>Technical Issue! </h2>
+
+                    </header>
+
+                    <!-- widget div-->
+                    <div>
+
+
+                        <!-- end widget edit box -->
+
+                        <!-- widget content -->
+                        <div class="widget-body no-padding">
+                            <fieldset>
+                                <section>
+                                   <h4> Technical Issues occured, please contact your administrator...</h4>
+                                </section>
+
+                                <section>
+                                   <h4> Please click&nbsp;@Html.ActionLink("here", "Login", "Company")&nbsp;to re-login your account</h4>
+                                </section>
+                            </fieldset>
+                        </div>
+                        <!-- end widget content -->
+
+                    </div>
+                    <!-- end widget div -->
+
+                </div>
+                <!-- end widget -->
+            </article>
+            <!-- END COL -->
+        </div>
+
+        <!-- END ROW -->
+
+
+    </section>
+</div>
+</body>
+</html>

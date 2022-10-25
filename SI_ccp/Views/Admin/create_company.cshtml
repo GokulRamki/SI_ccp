@@ -1,0 +1,332 @@
+﻿@model SI_ccp.Models.tbl_company_info
+
+@{
+    ViewBag.Title = "Create Company";
+}
+
+
+<section id="widget-grid" style="margin: 0px auto;">
+    <!-- START ROW -->
+    <div class="row">
+
+        <!-- NEW COL START -->
+        <article class="col-sm-12 col-md-12 col-lg-6" style="float: none; margin: 5px auto;">
+
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget" id="wid-id-3" data-widget-editbutton="false" data-widget-custombutton="false">
+
+                <header>
+                    <span class="widget-icon"><i class="fa fa-edit"></i></span>
+                    <h2>Create Company Information </h2>
+
+                </header>
+               
+                <!-- widget div-->
+                <div>
+
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
+
+                    </div>
+                    <!-- end widget edit box -->
+                    <!-- widget content -->
+                    <div class="widget-body no-padding">
+                        @using (Html.BeginForm("create_company", "Admin", FormMethod.Post, new { enctype = "multipart/form-data", id = "form-create_company", @class = "smart-form" }))
+                        {
+                            @Html.ValidationSummary(true)
+                            @Html.HiddenFor(model => model.id)
+
+                            <header>
+                                Company Information
+                            </header>
+                            if (ViewBag.errMsg != null)
+                            {
+                                <div class="alert alert-danger fade in">
+                                    <button class="close" data-dismiss="alert">
+                                        ×
+                                    </button>
+                                    <i class="fa-fw fa fa-warning"></i>
+                                    <strong>Failed ::</strong> @ViewBag.errMsg.
+                                </div>
+                            }
+
+                            <fieldset>
+
+                                <section>
+                                    <label class="label">Company Name</label>
+                                    <label class="input">
+                                        @Html.TextBoxFor(model => model.company_name, new { placeholder = "Company Name" })
+                                        @Html.ValidationMessageFor(model => model.company_name)
+                                    </label>
+                                </section>
+
+                                <div class="row">
+                                    <section class="col col-6">
+                                        <label class="label">Email</label>
+                                        <label class="input">
+                                            <i class="icon-append fa fa-envelope-o"></i>
+                                            @Html.TextBoxFor(model => model.email, new { placeholder = "Email", maxlength = 50 })
+                                            @Html.ValidationMessageFor(model => model.email)
+                                        </label>
+                                    </section>
+                                    @*<section class="col col-6">
+                        <label class="input">
+                            @Html.EditorFor(model => model.password, new { placeholder = "Password", maxlength = 50 })
+                            @Html.ValidationMessageFor(model => model.password)
+                        </label>
+                    </section>*@
+                                    <section class="col col-6">
+                                        <label class="label">Contact Person Name</label>
+                                        <label class="input" id="emailvalid">
+                                            <i class="icon-append fa fa-user"></i>
+                                            @Html.TextBoxFor(model => model.contact_person_name, new { placeholder = "Contact Person Name", maxlength = 150 })
+                                            @Html.ValidationMessageFor(model => model.contact_person_name)
+                                        </label>
+                                    </section>
+                                </div>
+
+                                <div class="row">
+                                    <section class="col col-6">
+                                        <label class="label">Phone Number</label>
+                                        <label class="input">
+                                            <i class="icon-append fa fa-phone"></i>
+                                            @Html.TextBoxFor(model => model.phone_number, new { placeholder = "Phone Number", maxlength = 20 })
+                                            @Html.ValidationMessageFor(model => model.phone_number)
+                                        </label>
+                                    </section>
+                                    <section class="col col-6">
+                                        <label class="label">Mobile Number</label>
+                                        <label class="input">
+                                            <i class="icon-append fa fa-phone"></i>
+                                            @Html.TextBoxFor(model => model.mobile_number, new { placeholder = "Mobile Number", maxlength = 20 })
+                                            @Html.ValidationMessageFor(model => model.mobile_number)
+                                        </label>
+                                    </section>
+
+                                </div>
+
+                                <section>
+                                    <label class="label">Address Line 1</label>
+                                    <label for="address1" class="input">
+                                        @Html.TextBoxFor(model => model.address1, new { placeholder = "Address Line 1" })
+                                        @Html.ValidationMessageFor(model => model.address1)
+                                    </label>
+                                </section>
+
+                                <section>
+                                    <label class="label">Address Line 2</label>
+                                    <label for="address2" class="input">
+                                        @Html.TextBoxFor(model => model.address2, new { placeholder = "Address Line 2" })
+                                    </label>
+                                </section>
+
+                                <div class="row">
+                                    <section class="col col-6">
+                                        <label class="label">City</label>
+                                        <label class="input">
+                                            @Html.TextBoxFor(model => model.city, new { placeholder = "City",maxlength = 50 })
+                                            @Html.ValidationMessageFor(model => model.city)
+                                        </label>
+                                    </section>
+                                    <section class="col col-6">
+                                        <label class="label">Sales Person</label>
+                                        <label class="select">
+                                            @Html.DropDownListFor(model => model.sales_person_id, new SelectList(ViewBag.SalesPerson, "Id", "fullName"), "-- Select Sales Person --")<i></i>
+                                        </label>
+                                    </section>
+                                    @*<section class="col col-6">
+                        <label class="label">&nbsp;</label>
+                        <label class="input">
+                            <b>Country:</b>   SI
+                            @Html.HiddenFor(model => model.country, new { Value = "SI" })
+                        </label>
+                    </section>*@
+                                </div>
+
+                                <div class="row">
+                                    <section class="col col-6">
+                                        <label class="label">Contract Expiry Date</label>
+                                        <label class="input">
+                                            @Html.TextBoxFor(model => model.contract_exp_date, "{0:dd/MM/yyyy}", new { @placeholder = "Contract Expiry Date" })
+                                            @Html.ValidationMessageFor(model => model.contract_exp_date)
+                                        </label>
+                                    </section>
+                                    <section class="col col-6">
+                                        <label class="label">Minimum Monthly Amount</label>
+                                        <label class="input">
+                                            @Html.TextBoxFor(model => model.min_mthly_spend, new { @placeholder = "Minimum Monthly Amount" })
+                                            @Html.ValidationMessageFor(model => model.min_mthly_spend)
+                                            <span id="txt" style="color:red"></span>
+                                        </label>
+                                    </section>
+                                </div>
+
+                                <div class="row">
+                                    <section class="col col-6">
+                                        <label class="label">&nbsp;</label>
+                                        <label class="input">
+                                            <b>Country:</b>   SI
+                                            @Html.HiddenFor(model => model.country, new { Value = "SI" })
+                                        </label>
+                                    </section>
+                                </div>
+
+                                <div class="row">
+                                    <section class="col col-6">
+                                        <label class="label">Min Transaction Amount</label>
+                                        <label class="input">
+                                            @Html.TextBoxFor(model => model.min_trans_amount, new { placeholder = "Min Transaction Amount", maxlength = 20 })
+                                            @Html.ValidationMessageFor(model => model.min_trans_amount)
+                                        </label>
+                                    </section>
+
+                                    <section class="col col-6">
+                                        <label class="label">Max Transaction Amount</label>
+                                        <label class="input">
+                                            @Html.TextBoxFor(model => model.max_trans_amount, new { placeholder = "Max Transaction Amount", maxlength = 20 })
+                                            @Html.ValidationMessageFor(model => model.max_trans_amount)
+                                        </label>
+                                    </section>
+                                </div>
+
+                                <div class="row">
+
+                                    <section class="col col-6">
+                                        <label><b>&nbsp;</b></label>
+                                        <label><b>Is Import Staff Topup File</b></label>
+                                    </section>
+                                    <section class="col col-6">
+                                        <div class="inline-group">
+                                            <label class="radio">
+                                                @Html.RadioButtonFor(model => model.is_import_topup, true, new { @checked = "checked" })
+                                                <i></i>active
+                                            </label>
+                                            <label class="radio" style="margin-top: 10px;">
+                                                @Html.RadioButtonFor(model => model.is_import_topup, false, new { })
+                                                <i></i>inactive
+                                            </label>
+                                        </div>
+                                    </section>
+
+                                </div>
+
+                                <div class="row">
+
+                                    <section class="col col-6">
+                                        <label><b>&nbsp;</b></label>
+                                        <label><b>Status</b></label>
+                                    </section>
+                                    <section class="col col-6">
+                                        <div class="inline-group">
+                                            <label class="radio">
+                                                @Html.RadioButtonFor(model => model.isactive, true, new { @checked = "checked" })
+                                                <i></i>active
+                                            </label>
+                                            <label class="radio" style="margin-top: 10px;">
+                                                @Html.RadioButtonFor(model => model.isactive, false, new { })
+                                                <i></i>inactive
+                                            </label>
+                                        </div>
+                                    </section>
+
+                                </div>
+
+                            </fieldset>
+                            <fieldset>
+                                <div class="row">
+                                    <section class="col col-6">
+                                        Send Password by E-mail:&nbsp;&nbsp;@Html.CheckBox("send_email")
+                                    </section>
+                                </div>
+                            </fieldset>
+                            <footer>
+                                <button type="button" class="btn btn-primary" onclick="window.location='@Url.Action("companies", "Admin")'">Back</button>
+                                &nbsp;&nbsp;
+                                <button type="submit" class="btn btn-primary" id="btnSubmit">
+                                    Submit
+                                </button>
+                            </footer>
+                        }
+                    </div>
+                    <!-- end widget content -->
+
+                </div>
+                <!-- end widget div -->
+
+            </div>
+            <!-- end widget -->
+        </article>
+        <!-- END COL -->
+    </div>
+
+    <!-- END ROW -->
+
+
+</section>
+
+@section Scripts {
+
+    <script>
+        $(document).ready(function () {
+
+            $('#contract_exp_date').datepicker(
+                {
+                    dateFormat: "dd/mm/yy",
+                    changeMonth: true,
+                    changeYear: true,
+                    minDate: 0,
+
+
+                });
+
+        });
+
+        $('#min_mthly_spend').keyup(function () {
+
+            check_val();
+        });
+
+        function check_val() {
+
+            var amt = $('#min_mthly_spend').val();
+
+            var min = 1;
+
+            if (parseInt(amt) < parseInt(min)) {
+                $('#txt').text('Amount must be greater than 0');
+                $("#min_mthly_spend").focus();
+                return false;
+            }
+            else {
+                $('#txt').text('');
+            }
+        }
+
+        $('#btnSubmit').on('click', function () {
+            var amt = $('#min_mthly_spend').val();
+
+            var min = 1;
+
+            if (parseInt(amt) < parseInt(min)) {
+                $('#txt').text('Amount must be greater than 0');
+                $("#min_mthly_spend").focus();
+                return false;
+            }
+            else {
+                $('#txt').text('');
+            }
+        });
+
+       
+            $(function () {
+                setTimeout(function () {
+                    $(".alert-danger").fadeOut(function (event) {
+                        $(".alert-danger").hide();
+                    });
+                }, 1500)
+            });
+    </script>
+
+
+}

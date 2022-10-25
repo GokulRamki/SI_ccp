@@ -1,0 +1,827 @@
+﻿@model SI_ccp.Models.import_staff_model
+
+@{
+    ViewBag.Title = "Import Staffs Topup";
+}
+
+<style>
+    .isuccess {
+        color: green;
+    }
+
+    .ifail {
+        width: 100%;
+        color: red;
+        padding-bottom: 2px;
+    }
+
+    th {
+        text-align: center;
+    }
+</style>
+
+
+<section id="widget-grid" style="margin: 0px auto;">
+    <!-- START ROW -->
+    <div class="row">
+        <!-- NEW COL START -->
+        <article class="col-sm-12 col-md-12 col-lg-6" style="float: none; margin: 5px auto; width: 100%;">
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget" id="wid-id-4" data-widget-editbutton="false" data-widget-custombutton="false">
+                <header>
+                    <span class="widget-icon"><i class="fa fa-edit"></i></span>
+                    <h2>Company Details</h2>
+                </header>
+                <!-- widget div-->
+                <div>
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
+                    </div>
+                    <!-- end widget edit box -->
+                    <!-- widget content -->
+                    <div class="widget-body no-padding">
+                        <div class="smart-form">
+                            <fieldset>
+
+                                @if (Model.company_info != null)
+                                {
+
+                                    <div class="row">
+                                        <section class="col col-6">
+                                            Company Name:
+                                            <b> @Model.company_info.company_name</b>
+                                        </section>
+
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            Available Credit Amount:&nbsp;&nbsp;&nbsp;
+                                            <span class="badge bg-color-greenLight"> $&nbsp;@Model.company_info.credit_amount</span>
+                                        </section>
+                                        <section class="col col-4">
+                                            Minimum Transaction Amount:&nbsp;&nbsp;&nbsp;<span class="badge bg-color-greenLight"> $&nbsp;@Model.company_info.min_trans_amount</span>
+                                        </section>
+                                        <section class="col col-4">
+                                            Maximum Transaction Amount:&nbsp;&nbsp;&nbsp;<span class="badge bg-color-greenLight"> $&nbsp;@Model.company_info.max_trans_amount</span>
+                                        </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-2">
+                                            <label class="label">Contact Name: </label>
+                                        </section>
+                                        <section class="col col-4">
+                                            <b>@Model.company_info.contact_person_name</b>
+                                        </section>
+                                        <section class="col col-2">
+                                            <label class="label">Email: </label>
+                                        </section>
+                                        <section class="col col-4">
+                                            <b>@Model.company_info.email</b>
+                                        </section>
+                                    </div>
+                                    <div class="row">
+
+                                        <section class="col col-2">
+                                            <label class="label">Mobile Number: </label>
+                                        </section>
+                                        <section class="col col-4">
+                                            <b>@Model.company_info.mobile_number</b>
+                                        </section>
+                                        <section class="col col-2">
+                                            <label class="label">Phone Number: </label>
+                                        </section>
+                                        <section class="col col-4">
+                                            <b>@Model.company_info.phone_number</b>
+                                        </section>
+                                    </div>
+
+
+                                }
+
+                            </fieldset>
+                        </div>
+                    </div>
+                    <!-- end widget content -->
+                </div>
+                <!-- end widget div -->
+            </div>
+            <!-- end widget -->
+        </article>
+        <!-- END COL -->
+    </div>
+    <!-- END ROW -->
+</section>
+
+@if (ViewBag.SuccessMessage != null)
+{
+    <div class="alert alert-success fade in">
+        <button class="close" data-dismiss="alert">
+            ×
+        </button>
+        <i class="fa-fw fa fa-check"></i>
+        <strong>Success</strong> @ViewBag.SuccessMessage
+    </div>
+}
+
+@if (ViewBag.Msg != null)
+{
+    <div class="alert alert-danger fade in">
+        <button class="close" data-dismiss="alert">
+            ×
+        </button>
+        <i class="fa-fw fa fa-check"></i>
+        <strong>Failed</strong> @ViewBag.Msg
+    </div>
+}
+
+@using (Html.BeginForm("import_staff_topup", "User", FormMethod.Post, new { enctype = "multipart/form-data", id = "form-import_sim" }))
+{
+
+    @Html.HiddenFor(m => m.cmd);
+    <section id="widget-grid" style="margin: 0px auto;">
+        <!-- START ROW -->
+        <div class="row">
+
+            <!-- NEW COL START -->
+            <article class="col-sm-12 col-md-12 col-lg-6" style="float: none; margin: 5px auto;">
+
+                <!-- Widget ID (each widget will need unique ID)-->
+                <div class="jarviswidget" id="wid-id-2" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+
+                    <header>
+                        <span class="widget-icon"><i class="fa fa-edit"></i></span>
+                        <h2>Import Staff Topup</h2>
+
+                    </header>
+
+                    <!-- widget div-->
+                    <div>
+
+                        <!-- widget edit box -->
+                        <div class="jarviswidget-editbox">
+                            <!-- This area used as dropdown edit box -->
+
+                        </div>
+                        <!-- end widget edit box -->
+                        <!-- widget content -->
+                        <div class="widget-body no-padding">
+                            <div class="smart-form">
+                                @Html.ValidationSummary(true)
+                                <fieldset>
+                                    <section style="float: right;">
+                                        Download Template&nbsp;&nbsp;
+                                        <a class="pro-link" href="@Url.Action("download_stafftemplate", "User")">
+                                            <span class="lbtn btn-primary" style="padding: 8px 10px;">Download</span>
+                                        </a>
+                                    </section>
+                                    <br />
+                                    <br />
+                                    <section>
+                                        <b>CSV file:</b>
+                                        <div class="input input-file">
+                                            <span class="button">
+                                                @Html.TextBoxFor(m => m.staff_csv, new { @type = "file", @name = "file", @onchange = "this.parentNode.nextSibling.value = this.value" })Browse
+                                            </span><input type="text" placeholder="Upload a csv file" readonly="">
+                                        </div>
+                                        <label>@Html.ValidationMessageFor(model => model.staff_csv)</label>
+
+                                    </section>
+
+                                </fieldset>
+                                <footer>
+                                    <button type="submit" id="btnsubmit" name="cmd" value="Export" class="btn btn-primary">
+                                        Import
+                                    </button>
+                                </footer>
+                            </div>
+                        </div>
+                        <!-- end widget content -->
+
+                    </div>
+                    <!-- end widget div -->
+
+                </div>
+                <!-- end widget -->
+            </article>
+            <!-- END COL -->
+        </div>
+
+        <!-- END ROW -->
+    </section>
+    if (Model.staff_topup_list != null)
+    {
+
+        if (Model.staff_topup_list.Count > 0)
+        {
+            @Html.HiddenFor(t => t.staffjson)
+            <section>
+
+                <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-2" data-widget-editbutton="false">
+                    <header>
+                        <span class="widget-icon"><i class="fa fa-table"></i></span>
+                        <h2 id="widget_title">Staff Topup Details</h2>
+                    </header>
+                    <!-- widget div-->
+                    <div>
+                        <!-- widget edit box -->
+                        <div class="jarviswidget-editbox">
+                            <!-- This area used as dropdown edit box -->
+                        </div>
+                        <!-- end widget edit box -->
+
+
+                        <div id="grid-list">
+                            <div style="overflow-x:auto">
+                                <table class="table table-bordered table-hover" id="resulttab">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                MSISDN No
+                                            </th>
+                                            <th>
+                                                First Name
+                                            </th>
+                                            <th>
+                                                Last Name
+                                            </th>
+                                            <th>
+                                                Amount
+                                            </th>
+                                            <th>
+                                                Invoice
+                                            </th>
+                                            <th>
+                                                E-mail
+                                            </th>
+                                            <th>
+                                                Bundles
+                                            </th>
+                                            @*<th>
+                                                Bundle2
+                                            </th>
+                                            <th>
+                                                Bundle3
+                                            </th>*@
+                                            <th>
+                                                Description
+                                            </th>
+                                            <th>
+                                                Remove
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @foreach(var item in @Model.staff_topup_list)
+                                        {
+                                            if (item.msisdn_number != null)
+                                            {
+
+                                                <tr class="resulttab" id="tr_item.msisdn_number">
+                                                    <td>
+                                                        <input class="msisdn_number" type="hidden" value="@item.msisdn_number" />
+                                                        <span>@item.msisdn_number</span>
+                                                        @Html.Hidden("msisdn_number", item.msisdn_number)
+                                                        @Html.Hidden("is_valid", item.is_valid, new { @class = "valid" })
+                                                        @Html.Hidden("bType1", item.bType, new { @class = "bType1" })
+                                                        @Html.Hidden("bType2", item.bType2, new { @class = "bType2" })
+                                                        @Html.Hidden("bType3", item.bType3, new { @class = "bType3" })
+                                                    </td>
+                                                    @if (item.is_valid == false)
+                                                    {
+                                                        <td>
+                                                            @*@item.first_name&nbsp;@item.last_name*@
+                                                            @*<input type="text" id="s_name_@item.msisdn_number" placeholder="Staff Name" style="width:100%; border:none;"/>*@
+                                                            @Html.TextBox("first_name", item.first_name, new { @class = "fname", @placeholder = "Firstname", @maxlength = "25", onclick = "textVal(this)" })
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBox("last_name", item.last_name, new { @class = "lname", @placeholder = "Lastname", @maxlength = "25", onclick = "textVal(this)" })
+
+                                                        </td>
+                                                        <td>
+                                                            @*@item.amount*@
+                                                            @*<input type="text" id="amt_@item.msisdn_number" placeholder="Amount" style="width:100%; border:none;" />*@
+                                                            @Html.TextBox("amount", item.amount, new { @class = "amt", @placeholder = "0.00", @maxlength = "10", onclick = "textVal(this)", @style="width: 60px" })
+
+                                                        </td>
+                                                        <td>
+                                                            @*@item.invoice*@
+                                                            @*<input type="text" id="inv_@item.msisdn_number" placeholder="Invoice" style="width:100%; border:none;" />*@
+                                                            @Html.TextBox("invoice", item.invoice, new { @class = "inv", @placeholder = "Invoice", @maxlength = "20", onclick = "textVal(this)", @style="width: 100px" })
+
+                                                        </td>
+                                                        <td>
+                                                            @*@item.email*@
+                                                            @*<input type="text" id="mail_@item.msisdn_number" placeholder="Email" style="width:100%; border:none;" />*@
+                                                            @Html.TextBox("email", item.email, new { @class = "mail", @placeholder = "E-Mail", @maxlength = "40", onclick = "textVal(this)" })
+                                                            @*@Html.ValidationMessageFor(t => t.staff_topup_list[i].email)*@
+                                                            <span id="spnMailError" class="text-danger"></span>
+                                                        </td>
+                                                        <td style="text-align:center;">
+                                                            @*@(item.bundle1_amt != null ? "$ " + item.bType + string.Format("{0:0.##}", item.bundle1_amt) : "")*@
+                                                            <label class="select">
+                                                                @Html.DropDownList("bType", new SelectList(ViewBag.BundleList, "id", "description"), "-- Select --", new { @class = "b1p", onchange = "bundleVal(this)" })<i></i>
+                                                            </label>
+                                                            <label class="select">
+                                                                @Html.DropDownList("bType2", new SelectList(ViewBag.BundleList, "id", "description"), "-- Select --", new { @class = "b2p", onchange = "bundleVal(this)" })<i></i>
+                                                            </label>
+                                                            <label class="select">
+                                                                @Html.DropDownList("bType3", new SelectList(ViewBag.BundleList, "id", "description"), "-- Select --", new { @class = "b3p", onchange = "bundleVal(this)" })<i></i>
+                                                            </label>
+                                                        </td>
+                                                        <!--<td style="text-align:center;">-->
+                                                            @*@(item.bundle2_amt != null ? "$ " + item.bType2 + string.Format("{0:0.##}", item.bundle2_amt) : "")*@
+                                                            <!--<label class="select">
+                                                                @Html.DropDownList("bType2", new SelectList(ViewBag.BundleList, "id", "description"), "-- Select --", new { @class = "b2p", onchange = "bundleVal(this)" })<i></i>
+                                                            </label>
+                                                        </td>
+                                                        <td style="text-align:center;">-->
+                                                            @*@(item.bundle3_amt != null ? "$ " + item.bType3 + string.Format("{0:0.##}", item.bundle3_amt) : "")*@
+                                                            <!--<label class="select">
+                                                                @Html.DropDownList("bType3", new SelectList(ViewBag.BundleList, "id", "description"), "-- Select --", new { @class = "b3p", onchange = "bundleVal(this)" })<i></i>
+                                                            </label>
+                                                        </td>-->
+                                                    }
+                                                    <td>
+                                                        @Html.Raw(item.description)
+
+                                                    </td>
+                                                    <td>
+
+                                                        <a class="delete-link" onclick="removeMe(this);">
+                                                            <img src="~/img/grid/delete-icon.png" border="0" alt="Delete" />
+                                                        </a>
+
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div id="progress_panel" class="widget-body" style="display: none; text-align: center;">
+                            <img src="~/img/ajax-loader.gif" alt="Loading.." style="margin: 15px 0px 15px 0px;" />
+                        </div>
+                    </div>
+
+                    <div class="col-sm-offset-5 col-sm-1" style="border:none">
+                        <button type="button" id="btnsubmit" name="cmd" value="Save" class="btn btn-primary pull-right" style="padding:5px 10px;">Submit</button>
+                    </div>
+
+                </div>
+
+            </section>
+
+        }
+    }
+}
+<!-- Delete dialog Begin -->
+<div id="delete-dialog" title="Confirmation" style="display: none;">
+    <p>Are you sure want to delete this staff topup ?</p>
+</div>
+<!-- Delete dialog End -->
+<!-- Duplicate dialog Begin -->
+@{
+    var listitem = ViewData["tempTable"] as List<SI_ccp.Models.temp_staff_topup>;
+}
+@if (listitem != null)
+{
+
+    if (listitem.Count > 0)
+    {
+
+
+        <div id="dup-dialog" style="">
+            <div id="myModal" class="modal modal-lg" style="display:block">
+
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <h4 class="text-danger">
+                        Duplicate Plan found in imported file. Kindly check and correct
+                    </h4>
+                    @*<span class="close">&times;</span>*@
+                    <div style="overflow-x:auto">
+                        <table class="table table-bordered table-hover" id="">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        MSISDN No
+                                    </th>
+                                    <th>
+                                        Bundle ID
+                                    </th>
+                                    <th>
+                                        Bundle Name
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in listitem)
+                                {
+                                    <tr>
+                                        <td>@item.msisdn</td>
+                                        <td>@item.bundle_id</td>
+                                        <td>@item.bundle_name</td>
+                                    </tr>
+                                }
+
+                            </tbody>
+
+                        </table>
+                        <button type="button" id="btnCloseDialog" class="btn btn-danger pull-right" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    }
+}
+<!-- Duplicate dialog End -->
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.resulttab').each(function () {
+               
+                var bType = $(this).find(".bType1").val();
+                var bType2 = $(this).find(".bType2").val();
+                var bType3 = $(this).find(".bType3").val();
+
+                $(this).find(".b1p").val(bType);
+                $(this).find(".b2p").val(bType2);
+                $(this).find(".b3p").val(bType3);
+            })
+        });
+
+        function textVal(et) {
+
+            $(et).css("border-color", "initial");
+            $(et).css("background-color", "white");
+
+        };
+
+
+
+        function bundleVal(et) {
+
+            var sib = $("#" + et.id).closest('tr').find('.b1p');
+            $(sib).css("border-color", "initial");
+            $(sib).css("background-color", "white");
+        };
+
+    </script>
+    <script>
+        $('#btnsubmit').live('click', function () {
+            debugger
+
+            var bVal = $(this).val();
+            $("#cmd").val(bVal);
+            if (bVal != "" && bVal == "Save") {
+
+                var bres = false;
+                bres = validate();
+                if (!bres) {
+                    return false;
+                }
+                else {
+                    
+                    $("#form-import_sim").submit();
+                }
+
+            }
+            else {
+                $(".b1p").val("");
+                $(".b2p").val("");
+                $(".b3p").val("");
+                $(".msisdn").val("");
+                $(".fname").val("");
+                $(".lname").val("");
+                $(".amt").val("");
+                $(".inv").val("");
+                $(".mail").val("");
+                var mob = $(".msisdn_number").val();
+                $("#cmd").val(bVal);
+                $("#form-import_sim").submit();
+            }
+        })
+               @*var modlist = [];
+               var cnt=@Model.staff_topup_list.Count();
+               debugger;
+               $('#resulttab tbody tr').each(function () {
+                   debugger;
+
+                   var valid = $(this).find(".valid").val();
+                   if (valid == "False") {
+                       var msisdn = $(this).find(".msisdn").val();
+                       var fname = $(this).find(".fname").val();
+                       var lname = $(this).find(".lname").val();
+                       var amt = $(this).find(".amt").val();
+                       var inv = $(this).find(".inv").val();
+                       var mail = $(this).find(".mail").val();
+                       var b1p = $(this).find(".b1p").val();
+                       var b2p = $(this).find(".b2p").val();
+                       var b3p = $(this).find(".b3p").val();
+                       var bid = [b1p, b2p, b3p];
+
+                       if ((fname == null || fname == "")) {
+                           $(".fname").css("border-color", "red");
+                           $(".fname").css("background-color", "#ffe6e6");
+                       }
+                       else{
+                           $(".fname").css("border-color", "initial");
+                           $(".fname").css("background-color", "white");
+                       }
+                       if ((lname == null || lname == "")) {
+                           $(".lname").css("border-color", "red");
+                           $(".lname").css("background-color", "#ffe6e6");
+                       }
+                       else{
+                           $(".lname").css("border-color", "initial");
+                           $(".lname").css("background-color", "white");
+                       }
+                       if ((inv == null || inv == "")) {
+                           $(".inv").css("border-color", "red");
+                           $(".inv").css("background-color", "#ffe6e6");
+                       }
+                       else{
+                           $(".inv").css("border-color", "initial");
+                           $(".inv").css("background-color", "white");
+                       }
+                       if ((mail == null || mail == "")) {
+
+                           $(".mail").css("border-color", "red");
+                           $(".mail").css("background-color", "#ffe6e6");
+                       }
+                       else{
+
+                           $(".mail").css("border-color", "initial");
+                           $(".mail").css("background-color", "white");
+                       }
+                       if ((amt == null || amt == "")) {
+                           $(".amt").css("border-color", "red");
+                           $(".amt").css("background-color", "#ffe6e6");
+                       }
+                       else{
+                           $(".amt").css("border-color", "initial");
+                           $(".amt").css("background-color", "white");
+                       }
+                       if (msisdn == "" || fname == "" || lname == "" || inv == "" || mail == "" || amt == "") {
+                           return false;
+                       }
+                       else {
+                           modlist.push({
+                               msisdn_number: msisdn,
+                               first_name: fname,
+                               last_name: lname,
+                               amount: amt,
+                               invoice: inv,
+                               email: mail,
+                               bid_list: bid,
+                               is_valid: valid
+                           })
+                       }
+                   }
+                   else
+                   {
+                       cnt=cnt-1;
+                   }
+               });
+               debugger;
+
+               if (modlist.length == cnt) {
+                   var json_lst = JSON.stringify(modlist);
+                   call_ajax_fn(json_lst);
+               }*@
+
+
+           //function call_ajax_fn(jsdata) {
+
+           //        $.ajax({
+           //        contentType: 'application/json; charset=utf-8',
+           //        dataType: 'text',
+           //        type: 'POST',
+           //        url: "/User/cctopupinsert",
+           //        data: jsdata,
+           //        success: function (data) {
+
+           //            $('#div_list').html(data);
+           //        }
+
+           //    });
+           //}
+
+        function removeMe(that) {
+            debugger
+            var dl = that;  //for future use
+
+            $("#delete-dialog").dialog({
+                title: "Confirmation",
+                buttons: {
+                    Continue: function () {
+                        debugger
+                        $(that).parent().parent().remove();
+
+                     $(this).dialog('close');
+                    },
+                    Close: function () {
+                        $(this).dialog('close');
+                    }
+                },
+                dialogClass: 'dialog_css',
+                width: 350,
+                closeOnEscape: false,
+                draggable: false,
+                resizable: false,
+                modal: true
+            });
+            return false; // prevents the default behaviour
+
+        };
+        function validate() {
+            var res = false;
+            var modlist = [];
+            var checkB = true;
+            $('.resulttab').each(function () {
+                debugger;
+
+                var valid = $(this).find(".valid").val();
+                if (valid != "True" || valid == "") {
+
+                    var msisdn = $(this).find(".msisdn_number").val();
+                    var fname = $(this).find(".fname").val();
+                    var lname = $(this).find(".lname").val();
+                    var amt = $(this).find(".amt").val();
+                    var inv = $(this).find(".inv").val();
+                    var mail = $(this).find(".mail").val();
+                    var b1p = $(this).find(".b1p").val();
+                    var b2p = $(this).find(".b2p").val();
+                    var b3p = $(this).find(".b3p").val();
+                    //var bid = [b1p, b2p, b3p];
+
+                    if ((fname == null || fname == "")) {
+                       $(this).find(".fname").css("border-color", "red");
+                        $(this).find(".fname").css("background-color", "#ffe6e6");
+                    }
+                    else {
+                        $(this).find(".fname").css("border-color", "initial");
+                        $(this).find(".fname").css("background-color", "white");
+                    }
+                    if ((lname == null || lname == "")) {
+                        $(this).find(".lname").css("border-color", "red");
+                        $(this).find(".lname").css("background-color", "#ffe6e6");
+                    }
+                    else {
+                        $(this).find(".lname").css("border-color", "initial");
+                        $(this).find(".lname").css("background-color", "white");
+                    }
+                    if ((inv == null || inv == "")) {
+                        $(this).find(".inv").css("border-color", "red");
+                        $(this).find(".inv").css("background-color", "#ffe6e6");
+                    }
+                    else {
+                        $(this).find(".inv").css("border-color", "initial");
+                        $(this).find(".inv").css("background-color", "white");
+                    }
+                    if ((mail == null || mail == "")) {
+
+                        $(this).find(".mail").css("border-color", "red");
+                        $(this).find(".mail").css("background-color", "#ffe6e6");
+
+                    }
+                    else {
+                        $(this).find("#spnMailError").html("");
+                        var expr = /^([\w-\.]+)@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+                        if (!expr.test(mail)) {
+                            $(this).find("#spnMailError").html("Enter valid Mail ID");
+                            checkB = false;
+                            res = false;
+                        }
+                        
+
+                        $(this).find(".mail").css("border-color", "initial");
+                        $(this).find(".mail").css("background-color", "white");
+                       
+                    }
+                    if ((amt == null || amt == "")) {
+                        $(this).find(".amt").css("border-color", "red");
+                        $(this).find(".amt").css("background-color", "#ffe6e6");
+                    }
+                    else {
+                        $(this).find(".amt").css("border-color", "initial");
+                        $(this).find(".amt").css("background-color", "white");
+                    }
+                    if (b1p == "" && b2p == "" && b3p == "") {
+
+                    //    $(".b1p").css("border-color", "red");
+                    //    $(".b1p").css("background-color", "#ffe6e6");
+
+                    }
+                    //else {
+
+                    //    $(".b1p").css("border-color", "initial");
+                    //    $(".b1p").css("background-color", "white");
+                    //}
+                   
+                    if (checkB) {
+
+                    
+                    if (msisdn == "" || fname == "" || lname == "" || inv == "" || mail == "" || amt == ""/* || b1p == "" && b2p == "" && b3p == ""*/) {
+                        res = false;
+                    }
+                    else {
+                        modlist.push({
+                            msisdn_number: msisdn,
+                            first_name: fname,
+                            last_name: lname,
+                            amount: amt,
+                            invoice: inv,
+                            email: mail,
+                            bType: b1p,
+                            bType2: b2p,
+                            bType3: b3p,
+                            is_valid: valid
+                        })
+
+                        res = true;
+                        }
+                    }
+
+                }
+
+            })
+            if (modlist.length > 0) {
+                debugger
+                var json_lst = JSON.stringify(modlist);
+                $("#staffjson").val(json_lst);
+
+            }
+            return res;
+        }
+        // Get the <span> element that closes the modal
+        //var span = document.getElementsByClassName("close")[0];
+
+        //// When the user clicks on <span> (x), close the modal
+        //span.onclick = function () {
+        //    $("#myModal").css("display" , "none");
+        //}
+        $("#btnCloseDialog").click(function () {
+            $("#myModal").css("display", "none");
+        })
+
+        function EmailCheck(userinput) {
+            var expr = /^([\w-\.]+)@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+            var res = true;
+            if (!expr.test(userinput)) {
+                $("#spnMailError").html("Enter valid Mail ID");
+                res = false;
+            }
+            return res;
+        }
+
+    </script>
+
+    <style>
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            padding-top: 100px; /* Location of the box */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        /* Modal Content */
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            left: 110px;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        /* The Close Button */
+        .close {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+            .close:hover,
+            .close:focus {
+                color: #000;
+                text-decoration: none;
+                cursor: pointer;
+            }
+    </style>
+}

@@ -1,0 +1,232 @@
+﻿@using MvcPaging
+@model IPagedList<SI_ccp.Models.CompanyModel>
+
+@{
+    ViewBag.Title = "Companies";
+
+    List<SelectListItem> status_list = new List<SelectListItem>();
+    status_list.Add(new SelectListItem { Text = "Active", Value = "true" });
+    status_list.Add(new SelectListItem { Text = "InActive", Value = "false" });
+
+}
+
+
+<section id="widget-grid" style="margin: 0px auto;">
+    <!-- START ROW -->
+    <div class="row">
+        <!-- NEW COL START -->
+        <article class="col-sm-12 col-md-12 col-lg-6" style="float: none; margin: 5px auto; width: 100%;">
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget" id="wid-id-3" data-widget-editbutton="false" data-widget-custombutton="false">
+                <header>
+                    <span class="widget-icon"><i class="fa fa-edit"></i></span>
+                    <h2>Search</h2>
+                </header>
+                <!-- widget div-->
+                <div>
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
+                    </div>
+                    <!-- end widget edit box -->
+                    <!-- widget content -->
+                    <div class="widget-body no-padding">
+                        @using (Ajax.BeginForm("companies", "Admin",
+                            new AjaxOptions { UpdateTargetId = "grid-list", HttpMethod = "get", LoadingElementId = "loading", OnBegin = "beginPaging", OnSuccess = "successPaging", OnFailure = "failurePaging" },
+                            new { id = "from-companies", @class = "smart-form" }))
+                        {
+                            <fieldset>
+                                <div class="row">
+                                    <section class="col col-2">
+                                        <b>Company Name</b>
+                                        <label class="input">
+                                            @Html.TextBox("company_name")
+                                        </label>
+                                    </section>
+                                    <section class="col col-2">
+                                        <b>E-mail:</b>
+                                        <label class="input">
+                                            @Html.TextBox("email")
+                                        </label>
+                                    </section>
+                                    <section class="col col-2">
+                                        <b>Mobile Number:</b>
+                                        <label class="input">
+                                            @Html.TextBox("mobile_no")
+                                        </label>
+                                    </section>
+                                    <section class="col col-2">
+                                        <b>Status:</b>
+                                        <label class="select">
+                                            @Html.DropDownList("ddlstatus", new SelectList(status_list, "Value", "Text"), "-- Select Status--", new { })<i></i>
+                                        </label>
+                                    </section>
+                                    <section class="col col-2">
+                                        <b>Sales Person :</b>
+                                        <label class="select">
+                                            <i class="icon-append fa fa-envelope-o"></i>
+                                            @Html.DropDownList("spId", new SelectList(ViewBag.SalesPerson, "Id", "fullName"), "--- Select ---")<i></i>
+                                        </label>
+                                    </section>
+                                    <section class="col col-2">
+                                        <br />
+                                        <button type="submit" id="btnsubmit" class="btn btn-primary" style="padding: 5px;">
+                                            Search
+                                        </button>
+                                        &nbsp;&nbsp;
+                                        <button type="button" class="btn btn-primary" onclick="window.location = '/Admin/companies';" style="padding: 5px;">Reset</button>
+                                    </section>
+                                </div>
+
+                            </fieldset>
+                        }
+                    </div>
+                    <!-- end widget content -->
+                </div>
+                <!-- end widget div -->
+            </div>
+            <!-- end widget -->
+        </article>
+        <!-- END COL -->
+    </div>
+    <!-- END ROW -->
+</section>
+
+
+<p style="text-align: right;">
+    <a class="btn btn-primary btn-xs" href="@Url.Action("create_company", "Admin")">Create New</a>
+    @if (Model.Count() > 0)
+    {
+        @*<p style="text-align: right;">*@
+        <a href="@Url.Action("companies_csv_export", "Admin")">
+            <img src="~/img/grid/Csv-icon.png" alt="Export to csv" border="0" />
+        </a>
+        @*</p>*@
+    }
+</p>
+
+
+@if (TempData["successmsg"] != null)
+{
+    <div class="alert alert-success fade in">
+        <button class="close" data-dismiss="alert">
+            ×
+        </button>
+        <i class="fa-fw fa fa-check"></i>
+        <strong>Success</strong> @TempData["successmsg"].
+    </div>
+}
+
+<div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-2" data-widget-editbutton="false">
+    <header>
+        <span class="widget-icon"><i class="fa fa-table"></i></span>
+        <h2 id="widget_title">Companies</h2>
+    </header>
+    <!-- widget div-->
+    <div>
+        <!-- widget edit box -->
+        <div class="jarviswidget-editbox">
+            <!-- This area used as dropdown edit box -->
+        </div>
+        <!-- end widget edit box -->
+
+        <div id="grid-list">
+            @if (Model.Count > 0)
+            {
+                { Html.RenderPartial("_ajax_companies", Model); }
+            }
+            else
+            {
+                <div style="width: 100%; text-align: center; padding: 10px 0px 10px 0px;">Records Not found!</div>
+            }
+        </div>
+        <div id="progress_panel" class="widget-body" style="display: none; text-align: center;">
+            <img src="~/img/ajax-loader.gif" alt="Loading.." style="margin: 15px 0px 15px 0px;" />
+        </div>
+    </div>
+</div>
+<!-- end widget div -->
+<!-- Delete dialog Begin -->
+<div id="delete-dialog" title="Confirmation" style="display: none;">
+    <p>Are you sure want to delete this company?</p>
+</div>
+<div id="delete-dialog-success" title="Confirmation" style="display: none;">
+       <p>Company Deleted Successfully</p>
+</div>
+<!-- Delete dialog End -->
+@section Scripts {
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+        });
+
+        // delete Link
+        $('.delete-link').live('click', function () {
+            var deleteLinkObj = $(this);  //for future use
+
+            $("#delete-dialog").dialog({
+                title: "Confirmation",
+                buttons: {
+                    Continue: function () {
+                        $.post(deleteLinkObj[0].href, function (data) {  //Post to action
+                            if (data.Status == 'true') {
+                                var tr = deleteLinkObj.parents('tr:first');
+                                tr.hide('fast'); //Hide Row
+                                $("#delete-dialog-success").dialog({
+                                    title: "Success",
+                                    buttons: {
+                                        Ok: function () {
+                                            $(this).dialog('close');
+                                        }
+                                    }
+                                });
+                            }
+                            else {
+                                //(optional) Display Error
+                            }
+                        });
+                        $(this).dialog('close');
+                    },
+                    Close: function () {
+                        $(this).dialog('close');
+                    }
+                },
+                dialogClass: 'dialog_css',
+                width: 350,
+                closeOnEscape: false,
+                draggable: false,
+                resizable: false,
+                modal: true
+            });
+            return false; // prevents the default behaviour
+
+        });
+
+
+    </script>
+
+}
+
+<script type="text/javascript">
+
+    function beginPaging(args) {
+        // Animate
+        $('#grid-list').fadeOut('normal');
+        $('#progress_panel').show();
+    }
+
+    function successPaging() {
+        // Animate
+        $('#grid-list').fadeIn('normal');
+        $('a').tooltip();
+        $('#progress_panel').hide();
+    }
+
+    function failurePaging() {
+        alert("Could not retrieve list.");
+    }
+
+
+</script>

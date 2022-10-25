@@ -1,0 +1,262 @@
+﻿@using MvcPaging
+@model IPagedList<SI_ccp.Models.SalesBySalesPersonModel>
+
+@{
+    ViewBag.Title = "Sales by Sales Person Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section id="widget-grid" style="margin: 0px auto;">
+    <!-- START ROW -->
+    <div class="row">
+
+        <!-- NEW COL START -->
+        <article class="col-sm-12 col-md-12 col-lg-6 sortable-grid ui-sortable" style="float: none; margin: 5px auto; width: 100%;">
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget jarviswidget-sortable" id="wid-id-3" data-widget-editbutton="false" data-widget-custombutton="false">
+                <header>
+                    <span class="jarviswidget-loader"><i class="fa fa-edit"></i></span>
+                    <h2>Search</h2>
+                </header>
+                <!-- widget div-->
+                <div>
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
+                    </div>
+                    <!-- end widget edit box -->
+                    <!-- widget content -->
+                    <div class="widget-body no-padding">
+                        @using (Ajax.BeginForm("SalesBySalesPersonReport", "Admin",
+new AjaxOptions { UpdateTargetId = "grid-list", HttpMethod = "get", LoadingElementId = "loading", OnBegin = "beginPaging", OnSuccess = "successPaging", OnFailure = "failurePaging" },
+new { id = "frmDailyTopupStatus", @class = "smart-form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <fieldset>
+                                <div class="row">
+                                    <section class="col col-3">
+                                        <b>Company Name :</b>
+                                        <label class="input">
+                                            @Html.TextBox("Name", null, new { placeholder = "Company Name" })
+                                        </label>
+                                    </section>
+                                    <section class="col col-3">
+                                        <b>Mobile Number :</b>
+                                        <label class="input">
+                                            @Html.TextBox("Number", null, new { placeholder = "Mobile Number" })
+                                        </label>
+                                    </section>
+                                    @{ string sdt = ViewData["sFrom"] != null ? ViewData["sFrom"].ToString() : string.Empty;
+                                        string edt = ViewData["sTo"] != null ? ViewData["sTo"].ToString() : string.Empty; }
+                                    <section class="col col-3">
+                                        <b>Payment Date From:</b>
+                                        <label class="input">
+                                            @Html.TextBox("sFrom", "", new { @placeholder = "Date From", Value = sdt, @readonly = "true" })
+                                        </label>
+                                    </section>
+                                    <section class="col col-3">
+                                        <b>To:</b>
+                                        <label class="input">
+                                            @Html.TextBox("sTo", "", new { @placeholder = "Date To", Value = edt, @readonly = "true" })
+                                        </label>
+                                    </section>
+
+
+                                    <section class="col col-3">
+                                        <b>Sales Person :</b>
+
+                                        <label class="select">
+                                            <i class="icon-append fa fa-envelope-o"></i>
+                                            @Html.DropDownList("salesPersonID", new SelectList(ViewBag.SalesPerson, "Id", "fullName"), "-- Select --")
+                                        </label>
+                                    </section>
+
+
+                                    <section class="col col-3">
+                                        <br />
+                                        <button type="submit" id="btnsubmit" class="btn btn-primary" style="padding: 5px;">
+                                            Search
+                                        </button>
+                                        &nbsp;&nbsp;
+                                        <button type="button" class="btn btn-primary" onclick="window.location='@Url.Action("SalesBySalesPersonReport", "Admin")'" style="padding: 5px;">Reset</button>
+                                    </section>
+                                </div>
+                            </fieldset>
+                        }
+                    </div>
+                    <!-- end widget content -->
+                </div>
+                <!-- end widget div -->
+            </div>
+            <!-- end widget -->
+        </article>
+        <!-- END COL -->
+    </div>
+
+    <!-- END ROW -->
+
+</section>
+<p style="text-align: right;">
+    <a class="btn btn-success btn-xs" href="@Url.Action("SalesBySalesPersonReportToCSV", "Admin")">Export CSV</a>
+</p>
+@if (TempData["successmsg"] != null)
+{
+    <div class="alert alert-success fade in">
+        <button class="close" data-dismiss="alert">
+            ×
+        </button>
+        <i class="fa-fw fa fa-check"></i>
+        <strong>Success ::</strong> @TempData["successmsg"].
+    </div>
+}
+<div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-2" data-widget-editbutton="false">
+    <header>
+        <span class="widget-icon"><i class="fa fa-table"></i></span>
+        <h2>Sales by Sales Person Report</h2>
+
+    </header>
+    <!-- widget div-->
+    <div>
+
+        <!-- widget edit box -->
+        <div class="jarviswidget-editbox">
+            <!-- This area used as dropdown edit box -->
+
+        </div>
+        <!-- end widget edit box -->
+
+        <div id="grid-list">
+
+            @if (Model.Count() > 0)
+            {
+                { Html.RenderPartial("_ajax_SalesBySalesPersonReport", Model); }
+            }
+            else
+            {
+                <div style="width: 100%; text-align: center; padding: 10px 0px 10px 0px;">Records Not found!</div>
+            }
+
+        </div>
+
+    </div>
+</div>
+
+<div id="delete-dialog" title="Confirmation" style="display: none;">
+    <p>Are you sure you want to delete this sales person?</p>
+</div>
+<div id="Return-dialog" title="Confirmation" style="display: none;">
+    <p>sales person deleted successfully</p>
+</div>
+
+@section Scripts {
+
+    <script type="text/javascript">
+        $("#topup").keypress(function (e) {
+            if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                return false;
+            }
+        });
+        $("#Number").keypress(function (e) {
+            if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                return false;
+            }
+        });
+
+        $('#topup').bind("paste", function (e) {
+            e.preventDefault();
+        });
+        $(document).ready(function () {
+
+            $("#sFrom").datepicker({
+                dateFormat: "dd/mm/yy",
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-104:+0",
+                beforeShow: function () {
+                    jQuery(this).datepicker('option', 'maxDate', jQuery('#sTo').val(), 'dd/mm/yy');
+                }
+            });
+
+            $("#sTo").datepicker({
+                dateFormat: "dd/mm/yy",
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-104:+0",
+                beforeShow: function () {
+                    jQuery(this).datepicker('option', 'minDate', jQuery('#sFrom').val(), 'dd/mm/yy');
+                }
+            });
+        });
+
+        // delete Link
+        $('.delete-link').live('click', function () {
+
+            var deleteLinkObj = $(this);  //for future use
+
+            $("#delete-dialog").dialog({
+                title: "Confirmation",
+                buttons: {
+                    Continue: function () {
+                        $.post(deleteLinkObj[0].href, function (data) {  //Post to action
+                            if (data.Status == 'true') {
+                                var tr = deleteLinkObj.parents('tr:first');
+                                tr.hide('fast'); //Hide Row
+                                $("#Return-dialog").dialog({
+                                    title: "Success",
+                                    buttons: {
+                                        Ok: function () {
+                                            $(this).dialog('close');
+                                        }
+                                    }
+                                });
+                            }
+                            else {
+                                //(optional) Display Error
+                            }
+                        });
+                        $(this).dialog('close');
+                    },
+                    Close: function () {
+                        $(this).dialog('close');
+                    }
+                },
+                width: 400,
+                closeOnEscape: false,
+                draggable: false,
+                resizable: false,
+                modal: true
+            });
+            return false; // prevents the default behaviour
+
+        });
+
+    </script>
+
+}
+
+
+
+
+
+
+<script type="text/javascript">
+
+    function beginPaging(args) {
+        // Animate
+        $('#grid-list').fadeOut('normal');
+        $("#div_loading").css("display", "block");
+    }
+
+    function successPaging() {
+        // Animate
+        $('#grid-list').fadeIn('normal');
+        $('a').tooltip();
+    }
+
+    function failurePaging() {
+        alert("Could not retrieve list.");
+    }
+
+
+
+</script>

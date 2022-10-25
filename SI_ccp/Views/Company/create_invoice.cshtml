@@ -1,0 +1,157 @@
+﻿@model SI_ccp.Models.InvoiceModel
+
+@{
+    ViewBag.Title = "create_invoice";
+}
+
+@if (TempData["successmsg"] != null)
+{
+    <div class="alert alert-success fade in">
+        <button class="close" data-dismiss="alert">
+            ×
+        </button>
+        <i class="fa-fw fa fa-check"></i>
+        <strong>Success</strong> @TempData["successmsg"].
+    </div>
+}
+
+<section id="widget-grid" style="margin: 0px auto;">
+    <!-- START ROW -->
+    <div class="row">
+
+        <!-- NEW COL START -->
+        <article class="col-sm-12 col-md-12 col-lg-6" style="float: none; margin: 5px auto;">
+
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget" id="wid-id-3" data-widget-editbutton="false" data-widget-custombutton="false">
+
+                <header>
+                    <span class="widget-icon"><i class="fa fa-edit"></i></span>
+                    @*<h2>Create Invoice </h2>*@
+
+                </header>
+
+                <!-- widget div-->
+                <div>
+
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
+
+                    </div>
+                    <!-- end widget edit box -->
+                    <!-- widget content -->
+                    <div class="widget-body no-padding">
+                        @using (Html.BeginForm("Generate_Invoice", "Company", FormMethod.Post, new { enctype = "multipart/form-data", id = "form-update_company", @class = "smart-form" }))
+                        {
+                            @Html.ValidationSummary(true)
+
+                            <header>
+                                Invoice Details
+                            </header>
+                            <fieldset>
+
+                                <div class="row">
+                                    <section class="col col-6">
+                                        <b>Enter Direct Topup Amount:</b>
+                                    </section>
+                                    <section class="col col-6">
+                                        <b>&nbsp;&nbsp; &nbsp;@Html.TextBoxFor(model => model.invoicedetail.total_quantity)</b>
+                                        @Html.ValidationMessageFor(model => model.invoicedetail.total_quantity)
+                                    </section>
+                                </div>
+                                <div class="row">
+                                    <section class="col col-6">
+                                        <b>Unit Cost per quantity:</b>
+
+                                    </section>
+                                    <section class="col col-6">
+                                        <b>$ &nbsp;@Html.TextBoxFor(model => model.invoicedetail.unit_price, new { @readonly = "readonly" })</b>
+                                        @Html.ValidationMessageFor(model => model.invoicedetail.unit_price)
+                                    </section>
+                                </div>
+                                <div class="row">
+                                    <section class="col col-6">
+                                        <b>Total Cost:</b>
+
+                                    </section>
+                                    <section class="col col-6">
+                                        <b>$ &nbsp;@Html.TextBoxFor(model => model.invoicedetail.total_amt, new { @readonly = "readonly" })</b>
+                                        @Html.ValidationMessageFor(model => model.invoicedetail.total_amt)
+                                    </section>
+                                    @*<section class="col col-6">
+                                            <label class="label">K &nbsp;<span id="@Model.invoicedetail.total_amt"></span></label>
+                                            @Html.ValidationMessageFor(model => model.invoicedetail.total_amt)
+                                        </section>*@
+                                </div>
+
+                            </fieldset>
+
+                            <footer>
+                                <button type="submit" class="btn btn-primary" id="btnSubmit">
+                                    Generate Invoice
+                                </button>
+                            </footer>
+                        }
+                    </div>
+                    <!-- end widget content -->
+
+                </div>
+                <!-- end widget div -->
+
+            </div>
+            <!-- end widget -->
+        </article>
+        <!-- END COL -->
+    </div>
+
+    <!-- END ROW -->
+
+
+</section>
+
+
+@section Scripts {
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $('#invoicedetail_unit_price').val(1);
+
+        });
+
+        $('#invoicedetail_total_quantity').keyup(function () {
+
+            var quantity = $('#invoicedetail_total_quantity').val();
+            var units = $('#invoicedetail_unit_price').val();
+
+            if (quantity != '') {
+                if (parseInt(quantity) != '' && parseInt(units) != '') {
+                    var total = parseInt(quantity) * parseInt(units);
+                    $('#invoicedetail_total_amt').val(total);
+                }
+            }
+
+            else {
+                $('#invoicedetail_total_amt').val('');
+            }
+
+        });
+
+
+        //$('#invoicedetail_unit_price').keyup(function () {
+        //    debugger;
+        //    var quantity = $('#invoicedetail_total_quantity').val();
+        //    var units = $('#invoicedetail_unit_price').val();
+
+        //    if (parseInt(quantity) != '' && parseInt(units) != '') {
+        //        var total = parseInt(quantity) * parseInt(units);
+        //        $('#invoicedetail_total_amt').val(total);
+        //    }
+
+        //});
+
+
+    </script>
+}

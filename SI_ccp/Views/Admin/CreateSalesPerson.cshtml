@@ -1,0 +1,109 @@
+﻿@model SI_ccp.Models.tbl_sales_person
+@{
+    ViewBag.Title = "Create Sales Person";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<section id="widget-grid" style="margin: 0px auto;">
+    <!-- START ROW -->
+
+    <div class="row">
+
+        <!-- NEW COL START -->
+        <article class="col-sm-12 col-md-12 col-lg-6" style="float: none; margin: 5px auto;">
+
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget" id="wid-id-3" data-widget-editbutton="false" data-widget-custombutton="false">
+
+                <header>
+                    <span class="widget-icon"><i class="fa fa-edit"></i></span>
+                    <h2>User Details </h2>
+                </header>
+                <div>
+
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
+                    </div>
+
+                    <!-- widget content -->
+                    <div class="widget-body no-padding">
+
+                        @using (Html.BeginForm("CreateSalesPerson", "Admin", FormMethod.Post, new { enctype = "multipart/form-data", id = "form-salesperson", @class = "smart-form", novalidate = "novalidate" }))
+                        {
+                            @Html.ValidationSummary(true)
+
+                            @Html.HiddenFor(model => model.Id)
+                            <fieldset>
+                                <section>
+                                    <b>First Name:</b>&nbsp;
+                                    <label class="input">
+                                        <i class="icon-append fa fa-user"></i>
+                                        @Html.TextBoxFor(model => model.first_name)
+                                        @Html.ValidationMessageFor(model => model.first_name)
+                                    </label>
+                                </section>
+
+                                <section>
+                                    <b>Last Name:</b>
+                                    <label class="input">
+                                        <i class="icon-append fa fa-user"></i>
+                                        @Html.TextBoxFor(model => model.last_name)
+                                        @Html.ValidationMessageFor(model => model.last_name)
+                                    </label>
+                                </section>
+                                <section>
+                                    <b>Email Id:</b>
+                                    <label class="input">
+                                        <i class="icon-append fa fa-envelope-o"></i>
+                                        @Html.TextBoxFor(model => model.email)
+                                        @Html.ValidationMessageFor(model => model.email)
+                                    </label>
+                                </section>
+                                <section>
+                                    <b>Contact Number:</b>
+                                    <label class="input">
+                                        <i class="icon-append fa fa-phone"></i>
+                                        @Html.TextBoxFor(model => model.contact_number)
+                                        @Html.ValidationMessageFor(model => model.contact_number)
+                                    </label>
+                                </section>
+                                <section>
+                                    <b>Contact Address:</b>
+                                    <label class="input">
+                                        <i class="icon-append fa fa-envelope-o"></i>
+                                        @Html.TextBoxFor(model => model.contact_address)
+                                        @Html.ValidationMessageFor(model => model.contact_address)
+                                    </label>
+                                </section>
+                                <section>
+                                    <label style="float:right">   @Html.CheckBoxFor(model => model.isActive) IsActive</label>
+                                </section>
+
+                            </fieldset>
+
+                            <footer>
+
+
+                                <button type="button" class="btn btn-primary" onclick="window.location='@Url.Action("SalesPersonDetails", "Admin")'">Back</button>
+                                &nbsp;&nbsp;<button type="submit" class="btn btn-primary">
+                                    Submit
+                                </button>
+                            </footer>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+            <!-- end widget -->
+
+
+        </article>
+        <!-- END COL -->
+
+    </div>
+
+    <!-- END ROW -->
+
+</section>

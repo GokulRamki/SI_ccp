@@ -1,0 +1,237 @@
+﻿@model SI_ccp.Models.staff_process_model
+
+@{
+    ViewBag.Title = "Staff Process";
+}
+
+<section id="widget-grid" style="margin: 0px auto;">
+    <!-- START ROW -->
+    <div class="row">
+        <!-- NEW COL START -->
+        <article class="col-sm-12 col-md-12 col-lg-6" style="float: none; margin: 5px auto; width: 100%;">
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget" id="wid-id-4" data-widget-editbutton="false" data-widget-custombutton="false">
+                <header>
+                    <span class="widget-icon"><i class="fa fa-edit"></i></span>
+                    <h2>Company Details</h2>
+                </header>
+                <!-- widget div-->
+                <div>
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
+                    </div>
+                    <!-- end widget edit box -->
+                    <!-- widget content -->
+                    <div class="widget-body no-padding">
+                        <div class="smart-form">
+                            <fieldset>
+
+                                @if (Model.company != null)
+                                {
+
+                                    <div class="row">
+                                        <section class="col col-6">
+                                            Company Name:
+                                            <b> @Model.company.company_name</b>
+                                        </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            Available Credit Amount:&nbsp;&nbsp;&nbsp;
+                                            <span class="@(Model.required_amt <= Model.company.credit_amount ? "badge bg-color-greenLight" : "badge bg-color-red")"> $&nbsp;@Model.company.credit_amount</span>
+                                        </section>
+                                        <section class="col col-4">
+                                            Required Amount:&nbsp;&nbsp;&nbsp;<span class="@(Model.required_amt <= Model.company.credit_amount ? "badge bg-color-greenLight" : "badge bg-color-red")"> $&nbsp;@Model.required_amt</span>
+                                        </section>
+
+                                        @{ decimal amt_owing = 0;
+
+                                         if (Model.required_amt > Model.company.credit_amount)
+                                         {
+                                             amt_owing = Model.required_amt - Model.company.credit_amount;
+                                         }
+                                         
+                                        }
+
+                                        <section class="col col-4">
+                                            Amount Owing:&nbsp;&nbsp;&nbsp;<span class="@(amt_owing > 0 ? "badge bg-color-red" : "badge bg-color-greenLight")"> $&nbsp;@amt_owing</span>
+                                        </section>
+                                    </div>
+                                }
+
+                            </fieldset>
+                        </div>
+                    </div>
+                    <!-- end widget content -->
+                </div>
+                <!-- end widget div -->
+            </div>
+            <!-- end widget -->
+        </article>
+        <!-- END COL -->
+    </div>
+    <!-- END ROW -->
+</section>
+
+<br />
+<br />
+
+<section id="widget-grid" style="margin: 0px auto;">
+    <!-- START ROW -->
+    <div class="row">
+
+        <!-- NEW COL START -->
+        <article class="col-sm-12 col-md-12 col-lg-6 sortable-grid ui-sortable" style="float: none; margin: 5px auto; width: 100%;">
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget jarviswidget-sortable" id="wid-id-2" data-widget-editbutton="false" data-widget-custombutton="false">
+                <header>
+                    <span class="jarviswidget-loader"><i class="fa fa-edit"></i></span>
+                    <h2>Staff Process</h2>
+                </header>
+                <!-- widget div-->
+                <div>
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
+                    </div>
+                    <!-- end widget edit box -->
+                    <!-- widget content -->
+                    <div class="widget-body no-padding">
+                        <div>
+                            <fieldset>
+                                <br />
+                                <br />
+                                <section>
+                                    @if (Model.required_amt <= Model.company.credit_amount)
+                                    {
+                                    <a class="pro-link" href="javascript:void(0);">
+                                        <span class="label label-primary" style="margin-left: 550px;padding: 15px 50px;font-size: 25px;">GO</span>
+                                    </a>
+                                    }
+                                    else
+                                    {
+
+                                    <div style="text-align:center;">
+                                        <span class="badge bg-color-red" style="padding: 10px 8px;">Unable to process topup, due to insufficient balance!</span>
+                                    </div>
+                                    }
+                                    <div class="div_processing" style="display: none;margin-left: 550px;padding: 15px 50px;">
+                                        <img src="~/img/ajax-loader.gif" border="0" alt="Processing.." />
+                                    </div>
+                                </section>
+
+                            </fieldset>
+                        </div>
+                    </div>
+                    <!-- end widget content -->
+                </div>
+                <!-- end widget div -->
+            </div>
+            <!-- end widget -->
+        </article>
+        <!-- END COL -->
+    </div>
+
+    <!-- END ROW -->
+</section>
+
+
+
+<!-- CUG Process dialog Begin -->
+<div id="pro-dialog" title="Confirmation" style="display: none;">
+    <p>Would you like to run this process for all staff?</p>
+</div>
+<!-- Return dialog Begin -->
+<div id="proReturn-dialog" title="Confirmation" style="display: none;">
+    <p id="p_proReturn-dialog" style="text-align: center;"> </p>
+</div>
+<!-- Return dialog Error  Begin -->
+<div id="proReturnfail-dialog" title="Error" style="display: none;">
+    <p>Process terminated due to insufficient balance!</p>
+</div>
+
+<!-- Return dialog Begin -->
+<style type="text/css">
+    .ui-dialog-titlebar-close {
+        display: none;
+    }
+</style>
+
+
+@section Scripts {
+
+    <script type="text/javascript">
+
+        $('.pro-link').click(function () {
+
+            $("#pro-dialog").dialog({
+                title: "Confirmation",
+                buttons: {
+                    Continue: function () {
+
+                        $(".div_processing").css("display", "block");
+                        $(".pro-link").css("display", "none");
+
+
+                        $.ajax({
+                            url: "/Company/staff_process",
+                            type: "POST",
+                            data: {},
+                            dataType: "json",
+                            traditional: true,
+                            success: function (data) {
+                                //if (data == true) {
+
+                                $("#p_proReturn-dialog").html(data);
+
+                                $(".div_processing").css("display", "none");
+                                $("#proReturn-dialog").dialog({
+                                    title: "Status",
+                                    buttons: {
+                                        Ok: function () {
+                                            $(".pro-link").css("display", "block");
+                                            $(this).dialog('close');
+                                            window.location.href = '@Url.Action("staff_process", "Company")';
+                                        }
+                                    }
+                                });
+                                //}
+                                //else {
+                                //    $(".div_processing").css("display", "none");
+                                //    $("#proReturnfail-dialog").dialog({
+                                //        title: "Failure",
+                                //        buttons: {
+                                //            Ok: function () {
+                                //                $(".pro-link").css("display", "block");
+                                //                $(this).dialog('close');
+                                //            }
+                                //        }
+                                //    });
+                                //}
+                            }
+
+                        });
+
+                        $(this).dialog('close');
+                    },
+                    Close: function () {
+                        $(this).dialog('close');
+                        //window.location.href = '@Url.Action("staff_process", "Company")';
+                    }
+                },
+                width: 400,
+                closeOnEscape: false,
+                draggable: false,
+                resizable: false,
+                modal: true
+            });
+
+            return false; // prevents the default behaviour
+        });
+
+
+
+    </script>
+}

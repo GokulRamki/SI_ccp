@@ -1,0 +1,414 @@
+﻿@model SI_ccp.Models.topup_detail_model
+
+@{
+    ViewBag.Title = "Topup Company";
+}
+
+<section id="widget-grid" style="margin: 0px auto;">
+    <!-- START ROW -->
+    <div class="row">
+
+        <!-- NEW COL START -->
+        <article class="col-sm-12 col-md-12 col-lg-6" style="float: none; margin: 5px auto;">
+
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget" id="wid-id-3" data-widget-editbutton="false" data-widget-custombutton="false">
+                <header>
+                    <span class="widget-icon"><i class="fa fa-edit"></i></span>
+                    <h2>Company Information </h2>
+
+                </header>
+
+                <!-- widget div-->
+                <div>
+
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
+
+                    </div>
+                    <!-- end widget edit box -->
+                    <!-- widget content -->
+                    <div class="widget-body no-padding">
+                        @using (Html.BeginForm("topup", "Admin", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmtopupcompany", @class = "smart-form", novalidate = "novalidate" }))
+                        {
+                            @Html.ValidationSummary(true)
+                            @Html.HiddenFor(model => model.company_id)
+                            <header>
+                                @Html.DisplayFor(model => model.company_name)
+                                @Html.HiddenFor(model => model.company_name)
+                            </header>
+                            if (ViewBag.SuccessMsg != null)
+                            {
+                                <div class="alert alert-success fade in">
+                                    <button class="close" data-dismiss="alert">
+                                        ×
+                                    </button>
+                                    <i class="fa-fw fa fa-check"></i>
+                                    <strong>Success</strong> @ViewBag.SuccessMsg
+                                </div>
+                            }
+                            if (ViewBag.Msg != null)
+                            {
+                                <div class="alert alert-warning fade in">
+                                    <button class="close" data-dismiss="alert">
+                                        ×
+                                    </button>
+                                    <i class="fa-fw fa fa-warning"></i>
+                                    <strong>Warning</strong> @ViewBag.Msg
+                                </div>
+                            }
+                            <fieldset>
+                                <div class="row">
+                                    <section class="col col-6">
+                                        <label class="input">
+                                            <b>Contact Name:&nbsp;</b>
+                                            @Html.DisplayFor(model => model.contact_person_name)
+                                            @Html.HiddenFor(model => model.contact_person_name)
+                                        </label>
+                                    </section>
+                                    <section class="col col-6">
+                                        <label class="input">
+                                            <b>E-mail:&nbsp;</b>
+                                            @Html.DisplayFor(model => model.email)
+                                            @Html.HiddenFor(model => model.email)
+                                        </label>
+                                    </section>
+                                </div>
+                                <section>
+                                    <b>Mobile Number:&nbsp;</b>
+                                    @Html.DisplayFor(model => model.mobile_number)
+                                    @Html.HiddenFor(model => model.mobile_number)
+                                </section>
+
+                                <section>
+                                    <b>Available Topup Amount:&nbsp;</b>$&nbsp;@Html.DisplayFor(model => model.avail_credit_amount)
+                                    @Html.HiddenFor(model => model.avail_credit_amount)
+                                </section>
+                                <section>
+                                    <b>Topup Amount:&nbsp;</b>
+                                    <label for="address1" class="input">
+                                        @Html.TextBoxFor(model => model.topup_amount, new { placeholder = "Topup Amount" })
+                                        @Html.ValidationMessageFor(model => model.topup_amount)
+                                    </label>
+                                </section>
+                                <div class="row">
+                                    <section class="col col-6">
+                                        <b>Payment Type:&nbsp;</b>
+                                        <label class="select">
+                                            @Html.DropDownListFor(model => model.payment_type_id, new SelectList(Model.pay_types, "Id", "payment_type"), "---- Select ----", new { })<i></i>
+                                            @Html.ValidationMessageFor(model => model.payment_type_id)
+                                            <span id="span_payment_type_id" style="margin-top: 6px; padding: 0px 1px; font-style: italic; font-size: 11px; line-height: 15px; color: #9F3D93; font-weight: bold;"></span>
+                                        </label>
+                                    </section>
+                                    <section class="col col-6">
+                                        <label class="input">
+                                            <b>Invoice Number:&nbsp;</b>
+                                            @Html.TextBoxFor(model => model.invoice, new { placeholder = "Invoice Number" })
+                                            @Html.HiddenFor(model => model.invoice)
+                                        </label>
+                                    </section>
+                                </div>
+                                <section id="AccountOrderSec">
+                                    <b>Account Order Number:&nbsp;</b>
+                                    <label class="input">
+                                        @Html.TextBoxFor(model => model.account_order_no, new { placeholder = "Account Order Number" })
+                                        @Html.ValidationMessageFor(m => m.account_order_no)
+                                        <span id="span_account_order_no" style="margin-top: 6px; padding: 0px 1px; font-style: italic; font-size: 11px; line-height: 15px; color: #9F3D93; font-weight: bold;">
+                                        </span>
+                                    </label>
+                                </section>
+                                <section id="InternalRefNoSec">
+                                    <b>Internal Reference Number:&nbsp;</b>
+                                    <label class="input">
+                                        @Html.TextBoxFor(model => model.internal_ref_no, new { placeholder = "Internal Reference Number" })
+                                        @Html.ValidationMessageFor(m => m.internal_ref_no)
+                                        <span id="span_internal_ref_no" style="margin-top: 6px; padding: 0px 1px; font-style: italic; font-size: 11px; line-height: 15px; color: #9F3D93; font-weight: bold;">
+                                        </span>
+                                    </label>
+                                </section>
+                                <section id="DescSec">
+                                    <b>Description:&nbsp;</b>
+                                    <label class="input">
+                                        @Html.TextBoxFor(model => model.description, new { placeholder = "Description" })
+                                        @Html.ValidationMessageFor(model => model.description)
+                                        <span id="span_description" style="margin-top: 6px; padding: 0px 1px; font-style: italic; font-size: 11px; line-height: 15px; color: #9F3D93; font-weight: bold;"></span>
+                                    </label>
+                                </section>
+                            </fieldset>
+                            <footer>
+                                <button type="button" class="btn btn-primary" onclick="window.location='@Url.Action("topup_transactions","Admin")'">Back</button>
+                                &nbsp;&nbsp;
+                                @*@if (ViewBag.SuccessMsg == null)
+                                    {*@
+                                <button id="btnSubmit" type="submit" class="btn btn-primary">
+                                    Submit
+                                </button>
+                                @*}*@
+                            </footer>
+                        }
+                    </div>
+                    <!-- end widget content -->
+
+                </div>
+                <!-- end widget div -->
+
+            </div>
+            <!-- end widget -->
+        </article>
+        <!-- END COL -->
+    </div>
+    <!-- END ROW -->
+</section>
+
+@if (Model.reports.Count > 0)
+{
+    <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-2" data-widget-editbutton="false">
+        <header>
+            <span class="widget-icon"><i class="fa fa-table"></i></span>
+            <h2 id="widget_title">Company Topup Details</h2>
+        </header>
+        <!-- widget div-->
+        <div>
+            <!-- widget edit box -->
+            <div class="jarviswidget-editbox">
+                <!-- This area used as dropdown edit box -->
+            </div>
+            <!-- end widget edit box -->
+
+
+            <div id="grid-list">
+
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+
+                            <th>
+                                Credited Date
+                            </th>
+                            <th>
+                                Amount
+                            </th>
+                            <th>
+                                Payment Type
+                            </th>
+                            <th>
+                                Invoice
+                            </th>
+                            <th>
+                                Account Order No
+                            </th>
+                            <th>
+                                Internal Ref No
+                            </th>
+                            <th>
+                                Description
+                            </th>
+                            <th>
+                                Recharge Status
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.reports)
+                        {
+                            <tr>
+                                <td>
+                                    @item.credited_on
+                                </td>
+                                <td>
+                                    @item.credit_amount
+                                </td>
+                                <td>
+                                    @item.payment_type_name
+                                </td>
+                                <td>
+                                    @item.invoice
+                                </td>
+                                <td>
+                                    @item.account_order_no
+                                </td>
+                                <td>
+                                    @item.internal_ref_no
+                                </td>
+                                <td>
+                                    @item.trans_desc
+                                </td>
+                                @*@if (item.is_recharged)
+                                    {
+                                        <td>Success</td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            Failed
+                                        </td>
+                                    }*@
+                                <td>
+                                    @if (item.approval_status_id == 2 || item.approval_status_id == 3)
+                                    {
+                                        @Html.Raw(String.Concat(item.approval_status, "d"))
+
+                                    }
+                                    else
+                                    {
+                                        @Html.Raw(item.approval_status)
+                                    }
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+
+            </div>
+            <div id="progress_panel" class="widget-body" style="display: none; text-align: center;">
+                <img src="~/img/ajax-loader.gif" alt="Loading.." style="margin: 15px 0px 15px 0px;" />
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Confirm dialog Begin -->
+<div id="confirm-dialog" title="Confirmation" style="display:none;">
+    <p>Are you sure you want to submit?</p>
+</div>
+<!-- Confirm dialog End -->
+@section Scripts {
+    @*@Scripts.Render("~/bundles/jqueryval")*@
+
+    @*<link href="@Url.Content("~/Content/themes/base/jquery-ui.css")" rel="stylesheet" type="text/css" />
+        <script src="@Url.Content("~/Scripts/jquery-ui-1.8.20.min.js")" type="text/javascript"></script>*@
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $("#invoice").val("");
+            $("#topup_amount").val('');
+            $("#description").val("");
+            $("#payment_type_id").val("");
+            $("#internal_ref_no").val("");
+            $("#account_order_no").val("");
+
+            $("#AccountOrderSec").hide();
+            $("#InternalRefNoSec").hide();
+
+            if ($("#payment_type_id").val() == '4') {
+                $("#AccountOrderSec").show();
+                $("#DescSec").hide();
+            } else if ($("#payment_type_id").val() == '5') {
+                $("#InternalRefNoSec").show();
+                $("#DescSec").hide();
+            }
+
+        });
+
+        $("#payment_type_id").on("change", function () {
+
+            $("#AccountOrderSec").hide();
+            $("#InternalRefNoSec").hide();
+
+            if ($(this).val() == '6') {
+
+                $("#AccountOrderSec").show();
+                $("#DescSec").hide();
+                $("#account_order_no").val("");
+
+            } else if ($(this).val() == '7') {
+
+                $("#InternalRefNoSec").show();
+                $("#DescSec").hide();
+                $("#internal_ref_no").val("");
+
+            } else {
+                $("#DescSec").show();
+            }
+
+
+        });
+
+
+        $("#btnSubmit").click(function (e) {
+
+            var res_payment_type_id = false;
+            var res_topup_amount = false;
+            var res_account_order_no = false;
+            var res_internal_ref_no = false;
+            var res_desc = false;
+
+            if ($('#payment_type_id').val() == '') {
+                $('#payment_type_id').removeClass("valid").addClass("input-validation-error").addClass("field-validation-error");
+            }
+            else {
+                $('#payment_type_id').removeClass("input-validation-error").addClass("valid");
+                res_payment_type_id = true;
+            }
+
+            if ($('#topup_amount').val() == '') {
+                $('#topup_amount').removeClass("valid").addClass("input-validation-error").addClass("field-validation-error");
+            }
+            else {
+                $('#topup_amount').removeClass("input-validation-error").addClass("valid");
+                res_topup_amount = true;
+            }
+
+            var paymentid = parseInt($('#payment_type_id').val());
+
+            if ($('#description').val() == '' && (paymentid < 6 || $('#payment_type_id').val() =='')) {
+                $('#description').removeClass("valid").addClass("input-validation-error").addClass("field-validation-error");
+            }
+            else {
+                $('#description').removeClass("input-validation-error").addClass("valid");
+                res_desc = true;
+            }
+
+            if ($('#account_order_no').val() == "" && paymentid == 6) {
+                $('#account_order_no').removeClass("valid").addClass("input-validation-error").addClass("field-validation-error");
+            }
+            else {
+                $('#account_order_no').removeClass("input-validation-error").addClass("valid");
+                res_account_order_no = true;
+            }
+
+
+            if ($('#internal_ref_no').val() == "" && paymentid == 7) {
+                $('#internal_ref_no').removeClass("valid").addClass("input-validation-error").addClass("field-validation-error");
+            }
+            else {
+                $('#internal_ref_no').removeClass("input-validation-error").addClass("valid");
+                res_internal_ref_no = true;
+            }
+
+
+            if (res_payment_type_id == true && res_topup_amount == true && res_account_order_no == true && res_internal_ref_no == true && res_desc == true) {
+
+                $("#confirm-dialog").dialog({
+                    title: "Confirmation",
+                    buttons: {
+                        Continue: function () {
+                            $(this).dialog('close');
+                            $("#frmtopupcompany").submit();
+                        },
+                        Close: function () {
+                            $(this).dialog('close');
+                        }
+                    },
+                    dialogClass: 'dialog_css',
+                    width: 350,
+                    closeOnEscape: false,
+                    draggable: false,
+                    resizable: false,
+                    modal: true
+                });
+            }
+            return false; // prevents the default behaviour
+
+
+        });
+
+
+    </script>
+}
